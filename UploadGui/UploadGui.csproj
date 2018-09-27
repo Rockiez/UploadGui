@@ -36,7 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +58,37 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PlayFabSDK\Json\ISerializer.cs" />
+    <Compile Include="PlayFabSDK\Json\NewtonsoftWrapper.cs" />
+    <Compile Include="PlayFabSDK\Json\SimpleJson.cs" />
+    <Compile Include="PlayFabSDK\PlayFabAdminAPI.cs" />
+    <Compile Include="PlayFabSDK\PlayFabAdminModels.cs" />
+    <Compile Include="PlayFabSDK\PlayFabClientAPI.cs" />
+    <Compile Include="PlayFabSDK\PlayFabClientModels.cs" />
+    <Compile Include="PlayFabSDK\PlayFabErrors.cs" />
+    <Compile Include="PlayFabSDK\PlayFabFileUtil.cs" />
+    <Compile Include="PlayFabSDK\PlayFabHttp\IPlayFabHttp.cs" />
+    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabHttp.cs" />
+    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabSysHttp.cs" />
+    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabWinHttp.cs" />
+    <Compile Include="PlayFabSDK\PlayFabMatchmakerAPI.cs" />
+    <Compile Include="PlayFabSDK\PlayFabMatchmakerModels.cs" />
+    <Compile Include="PlayFabSDK\PlayFabServerAPI.cs" />
+    <Compile Include="PlayFabSDK\PlayFabServerModels.cs" />
+    <Compile Include="PlayFabSDK\PlayFabSettings.cs" />
+    <Compile Include="PlayFabSDK\PlayFabUtil.cs" />
+    <Compile Include="PlayFabSDK\Uunit\PlayFabApiTest.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitAssertException.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitIncrementalTestRunner.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitTestCase.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitTestContext.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitTestReport.cs" />
+    <Compile Include="PlayFabSDK\Uunit\UUnitTestSuite.cs" />
+    <Compile Include="PlayFabSDK\WsaReflectionExtensions.cs" />
+    <Compile Include="Upload.cs" />
+    <Compile Include="UpLoadWin.xaml.cs">
+      <DependentUpon>UpLoadWin.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UpLoadWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

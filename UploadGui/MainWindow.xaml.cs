@@ -24,5 +24,26 @@ namespace UploadGui
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (UsernameText.Text == "a@b.c" && PasswordText.Text == "123")
+            {
+                UpLoadWin w1 = new UpLoadWin();
+                Application.Current.MainWindow = w1;
+                this.Close();
+                w1.Show();
+            }
+            else
+            {
+                MessageBox.Show("Your Username or Password is invalid！");
+            }
+
+        }
+
+        private void PasswordText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

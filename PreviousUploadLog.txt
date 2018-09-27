@@ -1,0 +1,2 @@
+	An unexpected error occurred: 未能找到路径“C:\Users\Administrator\source\repos\UploadGui\PlayFabData\TitleSettings.json”的一部分。
+UB_Uploader.exe ended with errors. See PreviousUploadLog.txt for details

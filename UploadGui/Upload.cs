@@ -9,7 +9,7 @@ using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.Json;
 
-namespace WpfApp1
+namespace UploadGui
 {
     public static class Upload
     {
@@ -17,65 +17,77 @@ namespace WpfApp1
         private static string defaultCatalog = null; // Determined by TitleSettings.json
         private static bool hitErrors;
 
+        public static string currencyPath = "./PlayFabData/Currency.json";
+        public static string titleSettingsPath = "./PlayFabData/TitleSettings.json";
+        public static string titleDataPath = "./PlayFabData/TitleData.json";
+        public static string catalogPath = "./PlayFabData/Catalog.json";
+        public static string dropTablesPath = "./PlayFabData/DropTables.json";
+        public static string cloudScriptPath = "./PlayFabData/CloudScript.js";
+        public static string titleNewsPath = "./PlayFabData/TitleNews.json";
+        public static string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
+        public static string storesPath = "./PlayFabData/Stores.json";
+        public static string cdnAssetsPath = "./PlayFabData/CdnData.json";
+
         // data file locations
-        private const string currencyPath = "./PlayFabData/Currency.json";
-        private const string titleSettingsPath = "./PlayFabData/TitleSettings.json";
-        private const string titleDataPath = "./PlayFabData/TitleData.json";
-        private const string catalogPath = "./PlayFabData/Catalog.json";
-        private const string dropTablesPath = "./PlayFabData/DropTables.json";
-        private const string cloudScriptPath = "./PlayFabData/CloudScript.js";
-        private const string titleNewsPath = "./PlayFabData/TitleNews.json";
-        private const string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
-        private const string storesPath = "./PlayFabData/Stores.json";
-        private const string cdnAssetsPath = "./PlayFabData/CdnData.json";
+        //private const string currencyPath = "./PlayFabData/Currency.json";
+        //private const string titleSettingsPath = "./PlayFabData/TitleSettings.json";
+        //private const string titleDataPath = "./PlayFabData/TitleData.json";
+        //private const string catalogPath = "./PlayFabData/Catalog.json";
+        //private const string dropTablesPath = "./PlayFabData/DropTables.json";
+        //private const string cloudScriptPath = "./PlayFabData/CloudScript.js";
+        //private const string titleNewsPath = "./PlayFabData/TitleNews.json";
+        //private const string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
+        //private const string storesPath = "./PlayFabData/Stores.json";
+        //private const string cdnAssetsPath = "./PlayFabData/CdnData.json";
 
 
-        //public static void Main(string[] args)
-        //{
-        //    try
-        //    {
-        //        // setup the log file
-        //        logFile = new FileInfo("PreviousUploadLog.txt");
-        //        logStream = logFile.CreateText();
 
-        //        // get the destination title settings
-        //        if (!GetTitleSettings())
-        //            throw new Exception("\tFailed to load Title Settings");
-
-        //        // start uploading
-        //        if (!UploadTitleData())
-        //            throw new Exception("\tFailed to upload TitleData.");
-        //        if (!UploadEconomyData())
-        //            throw new Exception("\tFailed to upload Economy Data.");
-        //        if (!UploadCloudScript())
-        //            throw new Exception("\tFailed to upload CloudScript.");
-        //        if (!UploadTitleNews())
-        //            throw new Exception("\tFailed to upload TitleNews.");
-        //        if (!UploadStatisticDefinitions())
-        //            throw new Exception("\tFailed to upload Statistics Definitions.");
-        //        if (!UploadCdnAssets())
-        //            throw new Exception("\tFailed to upload CDN Assets.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        hitErrors = true;
-        //        LogToFile("\tAn unexpected error occurred: " + ex.Message, ConsoleColor.Red);
-        //    }
-        //    finally
-        //    {
-        //        var status = hitErrors ? "ended with errors. See PreviousUploadLog.txt for details" : "ended successfully!";
-        //        var color = hitErrors ? ConsoleColor.Red : ConsoleColor.White;
-
-        //        LogToFile("UB_Uploader.exe " + status, color);
-        //        logStream.Close();
-        //        Console.WriteLine("Press return to exit.");
-        //        Console.ReadLine();
-        //    }
-        //}
         // log file details
         private static FileInfo logFile;
         private static StreamWriter logStream;
 
+        public static void UploadAllJson()
+        {
+            try
+            {
+                // setup the log file
+                logFile = new FileInfo("PreviousUploadLog.txt");
+                logStream = logFile.CreateText();
+
+                // get the destination title settings
+                if (!GetTitleSettings())
+                    throw new Exception("\tFailed to load Title Settings");
+
+                // start uploading
+                if (!UploadTitleData())
+                    throw new Exception("\tFailed to upload TitleData.");
+                if (!UploadEconomyData())
+                    throw new Exception("\tFailed to upload Economy Data.");
+                if (!UploadCloudScript())
+                    throw new Exception("\tFailed to upload CloudScript.");
+                if (!UploadTitleNews())
+                    throw new Exception("\tFailed to upload TitleNews.");
+                if (!UploadStatisticDefinitions())
+                    throw new Exception("\tFailed to upload Statistics Definitions.");
+                if (!UploadCdnAssets())
+                    throw new Exception("\tFailed to upload CDN Assets.");
+            }
+            catch (Exception ex)
+            {
+                hitErrors = true;
+                LogToFile("\tAn unexpected error occurred: " + ex.Message, ConsoleColor.Red);
+            }
+            finally
+            {
+                var status = hitErrors ? "ended with errors. See PreviousUploadLog.txt for details" : "ended successfully!";
+                var color = hitErrors ? ConsoleColor.Red : ConsoleColor.White;
+
+                LogToFile("UB_Uploader.exe " + status, color);
+                logStream.Close();
+                Console.WriteLine("Press return to exit.");
+                Console.ReadLine();
+            }
+        }
         // CDN
         public enum CdnPlatform { Desktop, iOS, Android }
         public static readonly Dictionary<CdnPlatform, string> cdnPlatformSubfolder = new Dictionary<CdnPlatform, string> {
