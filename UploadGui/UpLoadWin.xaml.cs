@@ -22,9 +22,31 @@ namespace UploadGui
     /// </summary>
     public partial class UpLoadWin : Window
     {
+        BackgroundWorker worker = new BackgroundWorker();
+
         public UpLoadWin()
         {
             InitializeComponent();
+
+            //initialize BackgroundWorker
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+            worker.DoWork += (o, ea) =>
+            {
+                Upload.UploadAllJson(o, ea);
+            };
+
+            worker.ProgressChanged += (o, ea) =>
+            {
+                //Missing Implementation about output in console.
+
+                uploadPB.Value = ea.ProgressPercentage;
+            };
+
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+            };
+     
         }
         //public string currencyPath = "./PlayFabData/Currency.json";
         //public string titleSettingsPath = "./PlayFabData/TitleSettings.json";
@@ -169,25 +191,22 @@ namespace UploadGui
 
         #endregion
 
+        //Upload Json file with async
         private void Upload_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
+            if (!worker.IsBusy)
             {
-                Upload.UploadAllJson();
-            };
-
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-            };
-
-            worker.RunWorkerAsync();
+                worker.RunWorkerAsync();
+            }
                 
         }
 
+
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
+            worker.CancelAsync();
 
+            //Missing Cancel Message
         }
     }
 }

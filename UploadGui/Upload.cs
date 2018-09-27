@@ -8,6 +8,8 @@ using System.Net;
 using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.Json;
+using System.ComponentModel;
+
 
 namespace UploadGui
 {
@@ -46,8 +48,11 @@ namespace UploadGui
         private static FileInfo logFile;
         private static StreamWriter logStream;
 
-        public static void UploadAllJson()
+        public static void UploadAllJson(object sender, DoWorkEventArgs args)
         {
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
             try
             {
                 // setup the log file
