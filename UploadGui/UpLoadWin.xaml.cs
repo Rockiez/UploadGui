@@ -22,42 +22,49 @@ namespace UploadGui
     /// </summary>
     public partial class UpLoadWin : Window
     {
-        BackgroundWorker worker = new BackgroundWorker();
+        //BackgroundWorker worker = new BackgroundWorker();
 
+        internal JsonPath upJsonPath;
         public UpLoadWin()
         {
             InitializeComponent();
 
-            //initialize BackgroundWorker
-            worker.WorkerReportsProgress = true;
-            worker.WorkerSupportsCancellation = true;
-            worker.DoWork += (o, ea) =>
-            {
-                Upload.UploadAllJson(o, ea);
-            };
+            //initializing JsonPath and giving Windows.DataContext
+            upJsonPath = new JsonPath();
+            this.DataContext = upJsonPath;
 
-            worker.ProgressChanged += (o, ea) =>
-            {
-                //Missing Implementation about output in console.
+            ////initializing BackgroundWorker
+            //worker.WorkerReportsProgress = true;
+            //worker.WorkerSupportsCancellation = true;
+            //worker.DoWork += (o, ea) =>
+            //{
+            //    Upload.UploadAllJson(o, ea);
+            //};
 
-                uploadPB.Value = ea.ProgressPercentage;
-            };
+            //worker.ProgressChanged += (o, ea) =>
+            //{
+            //    //Missing Implementation about output in console.
 
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-            };
+            //    uploadPB.Value = ea.ProgressPercentage;
+            //};
+
+            //worker.RunWorkerCompleted += (o, ea) =>
+            //{
+            //};
      
         }
-        //public string currencyPath = "./PlayFabData/Currency.json";
-        //public string titleSettingsPath = "./PlayFabData/TitleSettings.json";
-        //public string titleDataPath = "./PlayFabData/TitleData.json";
-        //public string catalogPath = "./PlayFabData/Catalog.json";
-        //public string dropTablesPath = "./PlayFabData/DropTables.json";
-        //public string cloudScriptPath = "./PlayFabData/CloudScript.js";
-        //public string titleNewsPath = "./PlayFabData/TitleNews.json";
-        //public string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
-        //public string storesPath = "./PlayFabData/Stores.json";
-        //public string cdnAssetsPath = "./PlayFabData/CdnData.json";
+
+        //add these strings after selected floder
+        private string currencyFolderPath = "/Currency.json";
+        private string titleSettingsFolderPath = "/TitleSettings.json";
+        private string titleDataFolderPath = "/TitleData.json";
+        private string catalogFolderPath = "/Catalog.json";
+        private string dropTablesFolderPath = "/DropTables.json";
+        private string cloudScriptFolderPath = "/CloudScript.js";
+        private string titleNewsFolderPath = "/TitleNews.json";
+        private string statsDefFolderPath = "/StatisticsDefinitions.json";
+        private string storesFolderPath = "/Stores.json";
+        private string cdnAssetsFolderPath = "/CdnData.json";
 
         // Select Folder
         private void AssetFolder_Click(object sender, RoutedEventArgs e)
@@ -66,77 +73,93 @@ namespace UploadGui
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                AssetFolderTB.Text = openFileDialog.SelectedPath;
+                upJsonPath.folderPath = openFileDialog.SelectedPath;
                 Directory.SetCurrentDirectory(openFileDialog.SelectedPath);
+
+                upJsonPath.currencyPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, currencyFolderPath);
+                upJsonPath.titleSettingsPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, titleSettingsFolderPath);
+                upJsonPath.titleDataPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, titleDataFolderPath);
+                upJsonPath.catalogPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, catalogFolderPath);
+                upJsonPath.dropTablesPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, dropTablesFolderPath);
+                upJsonPath.cloudScriptPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, cloudScriptFolderPath);
+                upJsonPath.titleNewsPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, titleNewsFolderPath);
+                upJsonPath.statsDefPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, statsDefFolderPath);
+                upJsonPath.storesPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, storesFolderPath);
+                upJsonPath.cdnAssetsPath = Check_File_Basis_FolderPath(upJsonPath.folderPath, cdnAssetsFolderPath);
+
             }
         }
 
+        //Check  filePath validatable
+        private string Check_File_Basis_FolderPath(string prefixPath, string suffixPath)
+        {
+            string intactPath = prefixPath + suffixPath;
+            if (File.Exists(intactPath))
+            {
+                return intactPath;
+            }
+            return "";
+        }
 
         #region Select file Functions 
 
-        private void Open_Local_Json(ref System.Windows.Controls.TextBox uploadTextBox, ref string uploadPath)
+        private string Open_Local_Json()
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog() { Filter = "(*.json)|*.json" };
-            if(AssetFolderTB.Text != "")
+            if(upJsonPath.folderPath != "")
             {
-                openFileDialog.InitialDirectory = AssetFolderTB.Text;
+                openFileDialog.InitialDirectory = upJsonPath.folderPath;
             }
             if (openFileDialog.ShowDialog() == true)
             {
-                uploadTextBox.Text = openFileDialog.FileName;
-                uploadPath = openFileDialog.FileName;
+                return openFileDialog.FileName;
             }
+            return "";
         }
 
         private void Currency_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref CurrencyTB, ref Upload.currencyPath);
-
+            upJsonPath.currencyPath = Open_Local_Json();
         }
 
         private void Catalog_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref CatalogTB, ref Upload.catalogPath);
+            upJsonPath.catalogPath = Open_Local_Json( );
         }
 
         private void Title_Data_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref TitleDataTB, ref Upload.titleDataPath);
-
+            upJsonPath.titleDataPath = Open_Local_Json();
         }
 
         private void Drop_Tables_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref DropTablesTB, ref Upload.dropTablesPath);
+            upJsonPath.dropTablesPath = Open_Local_Json();
         }
 
         private void Cloud_Script_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref CloudScriptTB, ref Upload.cloudScriptPath);
+            upJsonPath.cloudScriptPath = Open_Local_Json();
         }
 
         private void Title_News_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref TitleNewsTB, ref Upload.titleNewsPath);
-
+            upJsonPath.titleNewsPath = Open_Local_Json();
         }
 
         private void Statistics_Definitions_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref StatisticsDefinitionsTB, ref Upload.statsDefPath);
-
+            upJsonPath.statsDefPath = Open_Local_Json();
         }
 
         private void Stores_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref StoresTB, ref Upload.storesPath);
-
+            upJsonPath.storesPath = Open_Local_Json();
         }
 
         private void CDN_Assets_Click(object sender, RoutedEventArgs e)
         {
-            Open_Local_Json(ref CDNAssetsTB, ref Upload.storesPath);
-
+            upJsonPath.cdnAssetsPath = Open_Local_Json();
         }
         #endregion
 
@@ -144,49 +167,48 @@ namespace UploadGui
         #region Clean file Functions
         private void Currency_Clear_Click(object sender, RoutedEventArgs e)
         {
-            CurrencyTB.Clear();
-            Upload.currencyPath = "";
+            upJsonPath.currencyPath = "";
         }
 
         private void Catalog_Clear_Click(object sender, RoutedEventArgs e)
         {
-            CatalogTB.Clear();
-            Upload.catalogPath = "";
+            upJsonPath.catalogPath = "";
+
         }
         private void Title_Data_Clear_Click(object sender, RoutedEventArgs e)
         {
-            TitleDataTB.Clear();
-            Upload.titleDataPath = "";
+            upJsonPath.titleDataPath = "";
+
         }
         private void Drop_Tables_Clear_Click(object sender, RoutedEventArgs e)
         {
-            DropTablesTB.Clear();
-            Upload.dropTablesPath = "";
+            upJsonPath.dropTablesPath = "";
+
         }
         private void Cloud_Script_Clear_Click(object sender, RoutedEventArgs e)
         {
-            CloudScriptTB.Clear();
-            Upload.cloudScriptPath = "";
+            upJsonPath.cloudScriptPath = "";
+
         }
         private void Title_News_Clean_Click(object sender, RoutedEventArgs e)
         {
-            TitleNewsTB.Clear();
-            Upload.titleNewsPath = "";
+            upJsonPath.titleNewsPath = "";
+
         }
         private void Statistics_Definitions_Clean_Click(object sender, RoutedEventArgs e)
         {
-            StatisticsDefinitionsTB.Clear();
-            Upload.statsDefPath = "";
+            upJsonPath.statsDefPath = "";
+
         }
         private void Stores_Clean_Click(object sender, RoutedEventArgs e)
         {
-            StoresTB.Clear();
-            Upload.storesPath = "";
+            upJsonPath.storesPath = "";
+
         }
         private void CDN_Assets_clean_Click(object sender, RoutedEventArgs e)
         {
-            CDNAssetsTB.Clear();
-            Upload.cdnAssetsPath = "";
+            upJsonPath.cdnAssetsPath = "";
+
         }
 
         #endregion
@@ -194,19 +216,21 @@ namespace UploadGui
         //Upload Json file with async
         private void Upload_Click(object sender, RoutedEventArgs e)
         {
-            if (!worker.IsBusy)
-            {
-                worker.RunWorkerAsync();
-            }
+            //if (!worker.IsBusy)
+            //{
+            //    worker.RunWorkerAsync();
+            //}
                 
         }
 
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            worker.CancelAsync();
+            //worker.CancelAsync();
 
-            //Missing Cancel Message
+            ////Missing Cancel Message
         }
     }
+
+
 }

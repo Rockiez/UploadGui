@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="JsonPath.cs" />
     <Compile Include="PlayFabSDK\Json\ISerializer.cs" />
     <Compile Include="PlayFabSDK\Json\NewtonsoftWrapper.cs" />
     <Compile Include="PlayFabSDK\Json\SimpleJson.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="PlayFabSDK\Uunit\UUnitTestReport.cs" />
     <Compile Include="PlayFabSDK\Uunit\UUnitTestSuite.cs" />
     <Compile Include="PlayFabSDK\WsaReflectionExtensions.cs" />
+    <Compile Include="SelFileUIUtils.cs" />
     <Compile Include="Upload.cs" />
     <Compile Include="UpLoadWin.xaml.cs">
       <DependentUpon>UpLoadWin.xaml</DependentUpon>

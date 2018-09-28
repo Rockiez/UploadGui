@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 using System.Net;
 using PlayFab;
 using PlayFab.AdminModels;
@@ -19,30 +21,19 @@ namespace UploadGui
         private static string defaultCatalog = null; // Determined by TitleSettings.json
         private static bool hitErrors;
 
-        public static string currencyPath = "./PlayFabData/Currency.json";
-        public static string titleSettingsPath = "./PlayFabData/TitleSettings.json";
-        public static string titleDataPath = "./PlayFabData/TitleData.json";
-        public static string catalogPath = "./PlayFabData/Catalog.json";
-        public static string dropTablesPath = "./PlayFabData/DropTables.json";
-        public static string cloudScriptPath = "./PlayFabData/CloudScript.js";
-        public static string titleNewsPath = "./PlayFabData/TitleNews.json";
-        public static string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
-        public static string storesPath = "./PlayFabData/Stores.json";
-        public static string cdnAssetsPath = "./PlayFabData/CdnData.json";
+        public static TextBlock outputInTextBlock;
+        public static ProgressBar outputInProgressBar;
 
-        // data file locations
-        //private const string currencyPath = "./PlayFabData/Currency.json";
-        //private const string titleSettingsPath = "./PlayFabData/TitleSettings.json";
-        //private const string titleDataPath = "./PlayFabData/TitleData.json";
-        //private const string catalogPath = "./PlayFabData/Catalog.json";
-        //private const string dropTablesPath = "./PlayFabData/DropTables.json";
-        //private const string cloudScriptPath = "./PlayFabData/CloudScript.js";
-        //private const string titleNewsPath = "./PlayFabData/TitleNews.json";
-        //private const string statsDefPath = "./PlayFabData/StatisticsDefinitions.json";
-        //private const string storesPath = "./PlayFabData/Stores.json";
-        //private const string cdnAssetsPath = "./PlayFabData/CdnData.json";
-
-
+        public static string currencyPath = "./Currency.json";
+        public static string titleSettingsPath = "./TitleSettings.json";
+        public static string titleDataPath = "./TitleData.json";
+        public static string catalogPath = "./Catalog.json";
+        public static string dropTablesPath = "./DropTables.json";
+        public static string cloudScriptPath = "./CloudScript.js";
+        public static string titleNewsPath = "./TitleNews.json";
+        public static string statsDefPath = "./StatisticsDefinitions.json";
+        public static string storesPath = "./Stores.json";
+        public static string cdnAssetsPath = "./CdnData.json";
 
         // log file details
         private static FileInfo logFile;

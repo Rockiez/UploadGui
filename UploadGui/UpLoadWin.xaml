@@ -48,55 +48,65 @@
             <Label Grid.ColumnSpan="4" HorizontalAlignment="Center" >PlayFab Script Upload Tool</Label>
             <Label Grid.ColumnSpan="4" Grid.Row="1" Margin="10,0,0,0" VerticalAlignment="Center">You can also DRAG/folders into the form to import assets</Label>
             <Label Grid.Column="0" Grid.Row="2" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">Asset Folder</Label>
-            <TextBox  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" MinWidth="510" Height="30" Name="AssetFolderTB"  />
+            <TextBox  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" MinWidth="510" Height="30" Name="AssetFolderTB" 
+                      Text="{Binding  Path=folderPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
             <Button Grid.Row="2" Grid.Column="3" Content="Select" Margin="2" Height="30" Click="AssetFolder_Click"/>
 
 
             <Label Grid.Column="0" Grid.Row="4" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Currency" />
-            <TextBox  Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CurrencyTB"/>
+            <TextBox  Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CurrencyTB"
+                      Text="{Binding  Path=currencyPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="4" Content="Clear" Margin="2,4,0,4"  Height="30" Click="Currency_Clear_Click" HorizontalAlignment="Left" Width="82"/>
             <Button  Grid.Column="3" Grid.Row="4" Content="Select" Margin="2"  Height="30" Click="Currency_Click"/>
 
             <Label Grid.Column="0" Grid.Row="5" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Catalog" />
-            <TextBox  Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CatalogTB" />
+            <TextBox  Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CatalogTB" 
+                      Text="{Binding  Path=catalogPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="5" Content="Clear" Margin="2"  Height="30" Click="Catalog_Clear_Click"/>
             <Button  Grid.Column="3" Grid.Row="5" Content="Select" Margin="2"  Height="30" Click="Catalog_Click" />
 
 
             <Label Grid.Column="0" Grid.Row="6" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Title Data" />
-            <TextBox  Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="TitleDataTB" />
+            <TextBox  Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="TitleDataTB" 
+                      Text="{Binding  Path=titleDataPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="6" Content="Clear" Margin="2"  Height="30" Click="Title_Data_Clear_Click"/>
             <Button  Grid.Column="3" Grid.Row="6" Content="Select" Margin="2"  Height="30" Click="Title_Data_Click" />
 
             <Label Grid.Column="0" Grid.Row="7" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Drop Tables" />
-            <TextBox  Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="DropTablesTB"/>
+            <TextBox  Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="DropTablesTB" 
+                      Text="{Binding  Path=dropTablesPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="7" Content="Clear" Margin="2,4,0,5"  Height="30" Click="Drop_Tables_Clear_Click" HorizontalAlignment="Left" Width="82"/>
             <Button  Grid.Column="3" Grid.Row="7" Content="Select" Margin="2"  Height="30" Click="Drop_Tables_Click" />
 
             <Label Grid.Column="0" Grid.Row="8" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="CloudScript" />
-            <TextBox  Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CloudScriptTB"/>
+            <TextBox  Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CloudScriptTB"
+                      Text="{Binding  Path=cloudScriptPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="8" Content="Clear" Margin="2"  Height="30" Click="Cloud_Script_Clear_Click"/>
             <Button  Grid.Column="3" Grid.Row="8" Content="Select" Margin="2"  Height="30" Click="Cloud_Script_Click"/>
 
             <Label Grid.Column="0" Grid.Row="9" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Title News" />
-            <TextBox  Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="TitleNewsTB" />
+            <TextBox  Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="TitleNewsTB"
+                      Text="{Binding  Path=titleNewsPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="9" Content="Clear" Margin="2"  Height="30" Click="Title_News_Clean_Click" />
             <Button  Grid.Column="3" Grid.Row="9" Content="Select" Margin="2"  Height="30" Click="Title_News_Click"/>
 
 
             <Label Grid.Column="0" Grid.Row="10" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Statistics Definitions" />
-            <TextBox  Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="StatisticsDefinitionsTB"/>
+            <TextBox  Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="StatisticsDefinitionsTB"
+                      Text="{Binding  Path=statsDefPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="10" Content="Clear" Margin="2"  Height="30" Click="Statistics_Definitions_Clean_Click"/>
             <Button  Grid.Column="3" Grid.Row="10" Content="Select" Margin="2"  Height="30" Click="Statistics_Definitions_Click"/>
 
             <Label Grid.Column="0" Grid.Row="11" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Stores" />
-            <TextBox  Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="StoresTB" />
+            <TextBox  Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="StoresTB" 
+                      Text="{Binding  Path=storesPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="11" Content="Clear" Margin="2"  Height="30" Click="Stores_Clean_Click"/>
             <Button  Grid.Column="3" Grid.Row="11" Content="Button" Margin="2"  Height="30" Click="Stores_Click"/>
 
 
             <Label Grid.Column="0" Grid.Row="12" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="CDN Assets" />
-            <TextBox  Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CDNAssetsTB" />
+            <TextBox  Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" MinWidth="425" Height="30" Name="CDNAssetsTB" 
+                      Text="{Binding  Path=cdnAssetsPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             <Button  Grid.Column="2" Grid.Row="12" Content="Clear" Margin="2"  Height="30" Click="CDN_Assets_clean_Click"/>
             <Button  Grid.Column="3" Grid.Row="12" Content="Select" Margin="2"  Height="30" Click="CDN_Assets_Click"/>
 
@@ -105,8 +115,9 @@
             <Label Grid.Column="0" Grid.Row="15" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Log:" FontSize="16" />
             <Button  Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="16" Content="STOP" Margin="2"  Height="30" Click="Stop_Click"/>
 
-            <TextBox Name="consoleTB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="17" HorizontalAlignment="Center" Margin="2" Width="765"  />
+            <TextBlock Name="consoleTB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="17" HorizontalAlignment="Center" Margin="2" Width="765" Background="#0C000000" />
             <ProgressBar Name="uploadPB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="18" HorizontalAlignment="Center"  Margin="2" VerticalAlignment="Center" Width="765" Height="8" Value="0" />
+           
 
 
 
