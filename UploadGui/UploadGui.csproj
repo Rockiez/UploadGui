@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PlayFabAllSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PlayFabAllSDK.1.37.180924\lib\portable45-net45+win8+wpa81\PlayFabAllSDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -59,33 +62,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="JsonPath.cs" />
-    <Compile Include="PlayFabSDK\Json\ISerializer.cs" />
-    <Compile Include="PlayFabSDK\Json\NewtonsoftWrapper.cs" />
-    <Compile Include="PlayFabSDK\Json\SimpleJson.cs" />
-    <Compile Include="PlayFabSDK\PlayFabAdminAPI.cs" />
-    <Compile Include="PlayFabSDK\PlayFabAdminModels.cs" />
-    <Compile Include="PlayFabSDK\PlayFabClientAPI.cs" />
-    <Compile Include="PlayFabSDK\PlayFabClientModels.cs" />
-    <Compile Include="PlayFabSDK\PlayFabErrors.cs" />
-    <Compile Include="PlayFabSDK\PlayFabFileUtil.cs" />
-    <Compile Include="PlayFabSDK\PlayFabHttp\IPlayFabHttp.cs" />
-    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabHttp.cs" />
-    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabSysHttp.cs" />
-    <Compile Include="PlayFabSDK\PlayFabHttp\PlayFabWinHttp.cs" />
-    <Compile Include="PlayFabSDK\PlayFabMatchmakerAPI.cs" />
-    <Compile Include="PlayFabSDK\PlayFabMatchmakerModels.cs" />
-    <Compile Include="PlayFabSDK\PlayFabServerAPI.cs" />
-    <Compile Include="PlayFabSDK\PlayFabServerModels.cs" />
-    <Compile Include="PlayFabSDK\PlayFabSettings.cs" />
-    <Compile Include="PlayFabSDK\PlayFabUtil.cs" />
-    <Compile Include="PlayFabSDK\Uunit\PlayFabApiTest.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitAssertException.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitIncrementalTestRunner.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitTestCase.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitTestContext.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitTestReport.cs" />
-    <Compile Include="PlayFabSDK\Uunit\UUnitTestSuite.cs" />
-    <Compile Include="PlayFabSDK\WsaReflectionExtensions.cs" />
     <Compile Include="SelFileUIUtils.cs" />
     <Compile Include="Upload.cs" />
     <Compile Include="UpLoadWin.xaml.cs">
@@ -126,6 +102,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

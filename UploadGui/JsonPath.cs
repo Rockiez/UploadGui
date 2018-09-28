@@ -7,9 +7,16 @@ using System.ComponentModel;
 
 namespace UploadGui
 {
-    class JsonPath : INotifyPropertyChanged
+    public class JsonPath : INotifyPropertyChanged
     {
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         #region public property for Binding
         private string _folderPath;
@@ -159,16 +166,35 @@ namespace UploadGui
                 NotifyPropertyChanged("cdnAssetsPath");
             }
         }
-        #endregion 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void NotifyPropertyChanged(string propertyName)
+        private string _consoleTBContent;
+        public string consoleTBContent
         {
-            if (PropertyChanged != null)
+            get
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                return _consoleTBContent;
+            }
+            set
+            {
+                _consoleTBContent = value;
+                NotifyPropertyChanged("consoleTBContent");
             }
         }
+        private string _progressBarValue;
+        public string progressBarValue
+        {
+            get
+            {
+                return _progressBarValue;
+            }
+            set
+            {
+                _consoleTBContent = value;
+                NotifyPropertyChanged("progressBarValue");
+            }
+        }
+        #endregion 
+
+
         
     }
 }

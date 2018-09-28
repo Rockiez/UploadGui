@@ -24,7 +24,7 @@ namespace UploadGui
     {
         //BackgroundWorker worker = new BackgroundWorker();
 
-        internal JsonPath upJsonPath;
+        private JsonPath upJsonPath;
         public UpLoadWin()
         {
             InitializeComponent();
@@ -117,50 +117,16 @@ namespace UploadGui
             return "";
         }
 
-        private void Currency_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.currencyPath = Open_Local_Json();
-        }
-
-        private void Catalog_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.catalogPath = Open_Local_Json( );
-        }
-
-        private void Title_Data_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.titleDataPath = Open_Local_Json();
-        }
-
-        private void Drop_Tables_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.dropTablesPath = Open_Local_Json();
-        }
-
-        private void Cloud_Script_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.cloudScriptPath = Open_Local_Json();
-        }
-
-        private void Title_News_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.titleNewsPath = Open_Local_Json();
-        }
-
-        private void Statistics_Definitions_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.statsDefPath = Open_Local_Json();
-        }
-
-        private void Stores_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.storesPath = Open_Local_Json();
-        }
-
-        private void CDN_Assets_Click(object sender, RoutedEventArgs e)
-        {
-            upJsonPath.cdnAssetsPath = Open_Local_Json();
-        }
+        private void Currency_Click(object sender, RoutedEventArgs e) => upJsonPath.currencyPath = Open_Local_Json();
+        private void Catalog_Click(object sender, RoutedEventArgs e) => upJsonPath.catalogPath = Open_Local_Json();
+        private void Title_Data_Click(object sender, RoutedEventArgs e) => upJsonPath.titleDataPath = Open_Local_Json();
+        private void Drop_Tables_Click(object sender, RoutedEventArgs e) => upJsonPath.dropTablesPath = Open_Local_Json();
+        private void Cloud_Script_Click(object sender, RoutedEventArgs e) => upJsonPath.cloudScriptPath = Open_Local_Json();
+        private void Title_News_Click(object sender, RoutedEventArgs e) => upJsonPath.titleNewsPath = Open_Local_Json();
+        private void Statistics_Definitions_Click(object sender, RoutedEventArgs e) => upJsonPath.statsDefPath = Open_Local_Json();
+        private void Stores_Click(object sender, RoutedEventArgs e) => upJsonPath.storesPath = Open_Local_Json();
+        private void CDN_Assets_Click(object sender, RoutedEventArgs e) => upJsonPath.cdnAssetsPath = Open_Local_Json();
+        
         #endregion
 
 
@@ -214,13 +180,17 @@ namespace UploadGui
         #endregion
 
         //Upload Json file with async
-        private void Upload_Click(object sender, RoutedEventArgs e)
+        private async void Upload_Click(object sender, RoutedEventArgs e)
         {
             //if (!worker.IsBusy)
             //{
             //    worker.RunWorkerAsync();
             //}
-                
+            
+            UploadButton.IsEnabled = false;
+            await Task.Run(new Action(Upload.UploadAllJson));
+            UploadButton.IsEnabled= true;
+
         }
 
 
