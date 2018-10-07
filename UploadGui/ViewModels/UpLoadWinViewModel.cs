@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using UploadGui.Commands;
-using UploadGui.ViewModels;
 
-namespace UploadGui
+namespace UploadGui.ViewModels
 {
     public class UpLoadWinViewModel : NotificationObject
     {
@@ -259,7 +252,7 @@ namespace UploadGui
             }
         }
 
-        //Check  filePath validatable
+        //Check  filePath
         private string Check_File_Basis_FolderPath(string prefixPath, string suffixPath)
         {
             string intactPath = prefixPath + suffixPath;
@@ -383,24 +376,29 @@ namespace UploadGui
         #endregion
 
         //Upload Json file with async
+        public DelegateCommand UploadCommand { get; set; }
         private async void Upload(object sender)
         {
 
             uploadButtonEnable = false;
 
             //do something
+            UploadGui.Upload.UploadAllJson(this);
             uploadButtonEnable = true;
 
         }
 
-
+        public DelegateCommand StopCommand { get; set; }
         private void Stop(object sender)
         {
 
         }
 
+        //Binding
         public UpLoadWinViewModel()
         {
+            uploadButtonEnable = true;
+
             //Select Command Binding
             AssetFolderSelectCommand = new DelegateCommand
             {
@@ -498,6 +496,15 @@ namespace UploadGui
                 ExecuteAction = CDN_Assets_clean
             };
 
+            UploadCommand = new DelegateCommand
+            {
+                ExecuteAction = Upload
+            };
+
+            StopCommand = new DelegateCommand
+            {
+                ExecuteAction = Stop
+            };
         }
 
 

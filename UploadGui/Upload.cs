@@ -11,6 +11,7 @@ using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.Json;
 using System.ComponentModel;
+using UploadGui.ViewModels;
 
 
 namespace UploadGui
@@ -34,6 +35,9 @@ namespace UploadGui
         public static string statsDefPath = "./StatisticsDefinitions.json";
         public static string storesPath = "./Stores.json";
         public static string cdnAssetsPath = "./CdnData.json";
+        public static string cdnPath = "./AssetBundles/";
+
+        public static UpLoadWinViewModel Uwvm;
 
         // log file details
         private static FileInfo logFile;
@@ -99,7 +103,6 @@ namespace UploadGui
             { CdnPlatform.iOS, "iOS/" },
             { CdnPlatform.Android, "Android/" },
         };
-        public static string cdnPath = "./PlayFabData/AssetBundles/";
 
         /// <summary>
         /// This app parses the textfiles(defined above) and uploads the contents into a PlayFab title (defined in titleSettingsPath);
@@ -230,7 +233,6 @@ namespace UploadGui
                 };
 
                 var addNewsTask = PlayFabAdminAPI.AddNewsAsync(request);
-                addNewsTask.Wait();
 
                 if (addNewsTask.Result.Error != null)
                     OutputPlayFabError("\t\tTitleNews Upload: " + item.Title, addNewsTask.Result.Error);
