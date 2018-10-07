@@ -39,7 +39,7 @@ namespace UploadGui
         private static FileInfo logFile;
         private static StreamWriter logStream;
 
-        public static void UploadAllJson(JsonPath jp/*object sender, DoWorkEventArgs args*/)
+        public static void UploadAllJson(UpLoadWinViewModel jp/*object sender, DoWorkEventArgs args*/)
         {
             //BackgroundWorker worker = sender as BackgroundWorker;
             currencyPath = jp.currencyPath;

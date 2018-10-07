@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PlayFabAllSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PlayFabAllSDK.1.37.180924\lib\portable45-net45+win8+wpa81\PlayFabAllSDK.dll</HintPath>
+      <HintPath>..\packages\PlayFabAllSDK.1.38.181001\lib\portable45-net45+win8+wpa81\PlayFabAllSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -61,8 +61,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="JsonPath.cs" />
-    <Compile Include="SelFileUIUtils.cs" />
+    <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModels\NotificationObject.cs" />
+    <Compile Include="ViewModels\UpLoadWinViewModel.cs" />
     <Compile Include="Upload.cs" />
     <Compile Include="UpLoadWin.xaml.cs">
       <DependentUpon>UpLoadWin.xaml</DependentUpon>
@@ -111,5 +113,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
