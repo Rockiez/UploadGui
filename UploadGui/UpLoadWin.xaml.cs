@@ -28,7 +28,7 @@ namespace UploadGui
         {
             InitializeComponent();
             this.DataContext = new UpLoadWinViewModel();
-            //Test.IsEnabled = IsEnabled;
+           
         }
     }
 

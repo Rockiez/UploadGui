@@ -56,7 +56,7 @@ namespace UploadGui
         private FileInfo logFile;
         private StreamWriter logStream;
 
-        public async void UploadAllJson()
+        public async Task UploadAllJson()
         {
 
             try
@@ -98,8 +98,6 @@ namespace UploadGui
 
                 LogToFile("UB_Uploader.exe " + status, color);
                 logStream.Close();
-                Console.WriteLine("Press return to exit.");
-                Console.ReadLine();
             }
         }
 
@@ -508,7 +506,7 @@ namespace UploadGui
 
         void LogToFile(string content, ConsoleColor color = ConsoleColor.White)
         {
-            upLoadWinViewModel.consoleTBContent = upLoadWinViewModel.consoleTBContent + content;
+            upLoadWinViewModel.consoleTBContent = upLoadWinViewModel.consoleTBContent + content +"\n";
             Console.ForegroundColor = color;
             Console.WriteLine(content);
             logStream.WriteLine(content);

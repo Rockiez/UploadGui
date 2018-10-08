@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using PlayFab.UUnit;
 using UploadGui.Commands;
 
@@ -192,7 +193,6 @@ namespace UploadGui.ViewModels
                 _progressBarValue = value;
                 NotifyPropertyChanged("progressBarValue");
             }
-
         }
         private bool _uploadButtonEnable;
         public bool uploadButtonEnable
@@ -383,26 +383,16 @@ namespace UploadGui.ViewModels
         public DelegateCommand UploadCommand { get; set; }
         private void Upload(object sender)
         {
-
             uploadButtonEnable = false;
-
             var upload = new Upload(this);
-             upload.UploadAllJson();
-            uploadButtonEnable = true;
-
+            var uploadTask = upload.UploadAllJson();
+            uploadTask.ContinueWith((t, o) => { uploadButtonEnable = true; }, this);
         }
 
-
-
-
-
-
-
-
-
-
-
-
+        private bool CanUpload(object sender)
+        {
+            return uploadButtonEnable == true ? true : false;
+        }
 
 
         public DelegateCommand StopCommand { get; set; }
@@ -534,7 +524,8 @@ namespace UploadGui.ViewModels
 
             UploadCommand = new DelegateCommand
             {
-                ExecuteAction = Upload
+                ExecuteAction = Upload,
+                CanExecutePre = CanUpload
             };
 
             StopCommand = new DelegateCommand

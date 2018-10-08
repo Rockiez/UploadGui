@@ -11,7 +11,7 @@ namespace UploadGui.Commands
     {
         public bool CanExecute(object parameter)
         {
-            return true;
+            return CanExecutePre == null || CanExecutePre(parameter);
         }
 
         public void Execute(object parameter)
@@ -21,12 +21,11 @@ namespace UploadGui.Commands
                 return;
             }
             this.ExecuteAction(parameter);
-
         }
 
         public event EventHandler CanExecuteChanged;
 
         public Action<object> ExecuteAction { get; set; }
-        public Func<object, bool> CanExecuteFunc { get; set;}
+        public Predicate<object> CanExecutePre { get; set;}
     }
 }
