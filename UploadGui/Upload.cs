@@ -73,16 +73,40 @@ namespace UploadGui
                 // start uploading
                 if (!await UploadTitleData())
                     throw new Exception("\tFailed to upload TitleData.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 10;
+                }
                 if (!await UploadEconomyData())
                     throw new Exception("\tFailed to upload Economy Data.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 20;
+                }
                 if (!await UploadCloudScript())
                     throw new Exception("\tFailed to upload CloudScript.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 20;
+                }
                 if (!await UploadTitleNews())
                     throw new Exception("\tFailed to upload TitleNews.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 20;
+                }
                 if (!await UploadStatisticDefinitions())
                     throw new Exception("\tFailed to upload Statistics Definitions.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 20;
+                }
                 if (!await UploadCdnAssets())
                     throw new Exception("\tFailed to upload CDN Assets.");
+                else
+                {
+                    upLoadWinViewModel.progressBarValue += 10;
+                }
             }
             catch (Exception ex)
             {
@@ -506,7 +530,7 @@ namespace UploadGui
 
         void LogToFile(string content, ConsoleColor color = ConsoleColor.White)
         {
-            upLoadWinViewModel.consoleTBContent = upLoadWinViewModel.consoleTBContent + content +"\n";
+            upLoadWinViewModel.consoleTBContent = content + "\n"+ upLoadWinViewModel.consoleTBContent ;
             Console.ForegroundColor = color;
             Console.WriteLine(content);
             logStream.WriteLine(content);
