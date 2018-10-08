@@ -23,13 +23,12 @@ namespace UploadGui
     /// </summary>
     public partial class UpLoadWin : Window
     {
-        //BackgroundWorker worker = new BackgroundWorker();
-
 
         public UpLoadWin()
         {
             InitializeComponent();
             this.DataContext = new UpLoadWinViewModel();
+            //Test.IsEnabled = IsEnabled;
         }
     }
 

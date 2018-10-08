@@ -16,45 +16,48 @@ using UploadGui.ViewModels;
 
 namespace UploadGui
 {
-    public static class Upload
+    public class Upload
     {
-        // shared variables
-        private static string defaultCatalog = null; // Determined by TitleSettings.json
-        private static bool hitErrors;
+        private string defaultCatalog = null; // Determined by TitleSettings.json
+        private bool hitErrors;
 
-        public static TextBlock outputInTextBlock;
-        public static ProgressBar outputInProgressBar;
 
-        public static string currencyPath = "./Currency.json";
-        public static string titleSettingsPath = "./TitleSettings.json";
-        public static string titleDataPath = "./TitleData.json";
-        public static string catalogPath = "./Catalog.json";
-        public static string dropTablesPath = "./DropTables.json";
-        public static string cloudScriptPath = "./CloudScript.js";
-        public static string titleNewsPath = "./TitleNews.json";
-        public static string statsDefPath = "./StatisticsDefinitions.json";
-        public static string storesPath = "./Stores.json";
-        public static string cdnAssetsPath = "./CdnData.json";
-        public static string cdnPath = "./AssetBundles/";
+        public string currencyPath = "./Currency.json";
+        public string titleSettingsPath = "./TitleSettings.json";
+        public string titleDataPath = "./TitleData.json";
+        public string catalogPath = "./Catalog.json";
+        public string dropTablesPath = "./DropTables.json";
+        public string cloudScriptPath = "./CloudScript.js";
+        public string titleNewsPath = "./TitleNews.json";
+        public string statsDefPath = "./StatisticsDefinitions.json";
+        public string storesPath = "./Stores.json";
+        public string cdnAssetsPath = "./CdnData.json";
+        public string cdnPath = "./AssetBundles/";
 
-        public static UpLoadWinViewModel Uwvm;
+        private UpLoadWinViewModel upLoadWinViewModel;
+
+        public Upload(UpLoadWinViewModel upLoadWinViewModel)
+        {
+            this.upLoadWinViewModel = upLoadWinViewModel;
+
+            currencyPath = upLoadWinViewModel.currencyPath;
+            catalogPath = upLoadWinViewModel.catalogPath;
+            titleDataPath = upLoadWinViewModel.titleDataPath;
+            dropTablesPath = upLoadWinViewModel.dropTablesPath;
+            cloudScriptPath = upLoadWinViewModel.cloudScriptPath;
+            titleNewsPath = upLoadWinViewModel.titleNewsPath;
+            statsDefPath = upLoadWinViewModel.statsDefPath;
+            storesPath = upLoadWinViewModel.storesPath;
+            cdnAssetsPath = upLoadWinViewModel.cdnAssetsPath;
+
+        }
 
         // log file details
-        private static FileInfo logFile;
-        private static StreamWriter logStream;
+        private FileInfo logFile;
+        private StreamWriter logStream;
 
-        public static void UploadAllJson(UpLoadWinViewModel jp/*object sender, DoWorkEventArgs args*/)
+        public async void UploadAllJson()
         {
-            //BackgroundWorker worker = sender as BackgroundWorker;
-            currencyPath = jp.currencyPath;
-            catalogPath = jp.catalogPath;
-            titleDataPath = jp.titleDataPath;
-            dropTablesPath = jp.dropTablesPath;
-            cloudScriptPath = jp.cloudScriptPath;
-            titleNewsPath = jp.titleNewsPath;
-            statsDefPath = jp.statsDefPath;
-            storesPath = jp.storesPath;
-            cdnAssetsPath = jp.cdnAssetsPath;
 
             try
             {
@@ -63,21 +66,22 @@ namespace UploadGui
                 logStream = logFile.CreateText();
 
                 // get the destination title settings
+
                 if (!GetTitleSettings())
                     throw new Exception("\tFailed to load Title Settings");
 
                 // start uploading
-                if (!UploadTitleData())
+                if (!await UploadTitleData())
                     throw new Exception("\tFailed to upload TitleData.");
-                if (!UploadEconomyData())
+                if (!await UploadEconomyData())
                     throw new Exception("\tFailed to upload Economy Data.");
-                if (!UploadCloudScript())
+                if (!await UploadCloudScript())
                     throw new Exception("\tFailed to upload CloudScript.");
-                if (!UploadTitleNews())
+                if (!await UploadTitleNews())
                     throw new Exception("\tFailed to upload TitleNews.");
-                if (!UploadStatisticDefinitions())
+                if (!await UploadStatisticDefinitions())
                     throw new Exception("\tFailed to upload Statistics Definitions.");
-                if (!UploadCdnAssets())
+                if (!await UploadCdnAssets())
                     throw new Exception("\tFailed to upload CDN Assets.");
             }
             catch (Exception ex)
@@ -87,7 +91,9 @@ namespace UploadGui
             }
             finally
             {
-                var status = hitErrors ? "ended with errors. See PreviousUploadLog.txt for details" : "ended successfully!";
+                var status = hitErrors
+                    ? "ended with errors. See PreviousUploadLog.txt for details"
+                    : "ended successfully!";
                 var color = hitErrors ? ConsoleColor.Red : ConsoleColor.White;
 
                 LogToFile("UB_Uploader.exe " + status, color);
@@ -96,12 +102,20 @@ namespace UploadGui
                 Console.ReadLine();
             }
         }
+
         // CDN
-        public enum CdnPlatform { Desktop, iOS, Android }
-        public static readonly Dictionary<CdnPlatform, string> cdnPlatformSubfolder = new Dictionary<CdnPlatform, string> {
-            { CdnPlatform.Desktop, "" },
-            { CdnPlatform.iOS, "iOS/" },
-            { CdnPlatform.Android, "Android/" },
+        public enum CdnPlatform
+        {
+            Desktop,
+            iOS,
+            Android
+        }
+
+        public readonly Dictionary<CdnPlatform, string> cdnPlatformSubfolder = new Dictionary<CdnPlatform, string>
+        {
+            {CdnPlatform.Desktop, ""},
+            {CdnPlatform.iOS, "iOS/"},
+            {CdnPlatform.Android, "Android/"},
         };
 
         /// <summary>
@@ -109,15 +123,17 @@ namespace UploadGui
         /// </summary>
         /// <param name="args"></param>
 
-        public static bool GetTitleSettings()
+        public bool GetTitleSettings()
         {
             var parsedFile = ParseFile(titleSettingsPath);
 
             var titleSettings = JsonWrapper.DeserializeObject<Dictionary<string, string>>(parsedFile);
 
             if (titleSettings != null &&
-                titleSettings.TryGetValue("TitleId", out PlayFabSettings.TitleId) && !string.IsNullOrEmpty(PlayFabSettings.TitleId) &&
-                titleSettings.TryGetValue("DeveloperSecretKey", out PlayFabSettings.DeveloperSecretKey) && !string.IsNullOrEmpty(PlayFabSettings.DeveloperSecretKey) &&
+                titleSettings.TryGetValue("TitleId", out PlayFabSettings.TitleId) &&
+                !string.IsNullOrEmpty(PlayFabSettings.TitleId) &&
+                titleSettings.TryGetValue("DeveloperSecretKey", out PlayFabSettings.DeveloperSecretKey) &&
+                !string.IsNullOrEmpty(PlayFabSettings.DeveloperSecretKey) &&
                 titleSettings.TryGetValue("CatalogName", out defaultCatalog))
             {
                 LogToFile("Setting Destination TitleId to: " + PlayFabSettings.TitleId);
@@ -131,32 +147,34 @@ namespace UploadGui
         }
 
         #region Uploading Functions -- these are straightforward calls that push the data to the backend
-        private static bool UploadEconomyData()
+
+        private async Task<bool> UploadEconomyData()
         {
             ////MUST upload these in this order so that the economy data is properly imported: VC -> Catalogs -> DropTables -> Stores
-            if (!UploadVc())
+            if (!(await UploadVc()))
                 return false;
 
             var reUploadList = new List<CatalogItem>();
-            if (!UploadCatalog(ref reUploadList))
+            if (!(await UploadCatalog(reUploadList)))
                 return false;
 
-            if (!UploadDropTables())
+            if (!await UploadDropTables())
                 return false;
 
-            if (!UploadStores())
+            if (!(await UploadStores()))
                 return false;
 
             // workaround for the DropTable conflict
             if (reUploadList.Count > 0)
             {
                 LogToFile("Re-uploading [" + reUploadList.Count + "] CatalogItems due to DropTable conflicts...");
-                UpdateCatalog(reUploadList);
+                await UpdateCatalog(reUploadList);
             }
+
             return true;
         }
 
-        public static bool UploadStatisticDefinitions()
+        public async Task<bool> UploadStatisticDefinitions()
         {
             if (string.IsNullOrEmpty(statsDefPath))
                 return false;
@@ -177,14 +195,15 @@ namespace UploadGui
                     AggregationMethod = item.AggregationMethod
                 };
 
-                var createStatTask = PlayFabAdminAPI.CreatePlayerStatisticDefinitionAsync(request);
-                createStatTask.Wait();
+                var createStatTask = await PlayFabAdminAPI.CreatePlayerStatisticDefinitionAsync(request);
+                //createStatTask.Wait();
 
-                if (createStatTask.Result.Error != null)
+                if (createStatTask.Error != null)
                 {
-                    if (createStatTask.Result.Error.Error == PlayFabErrorCode.StatisticNameConflict)
+                    if (createStatTask.Error.Error == PlayFabErrorCode.StatisticNameConflict)
                     {
-                        LogToFile("\tStatistic Already Exists, Updating values: " + item.StatisticName, ConsoleColor.DarkYellow);
+                        LogToFile("\tStatistic Already Exists, Updating values: " + item.StatisticName,
+                            ConsoleColor.DarkYellow);
                         var updateRequest = new UpdatePlayerStatisticDefinitionRequest()
                         {
                             StatisticName = item.StatisticName,
@@ -192,16 +211,19 @@ namespace UploadGui
                             AggregationMethod = item.AggregationMethod
                         };
 
-                        var updateStatTask = PlayFabAdminAPI.UpdatePlayerStatisticDefinitionAsync(updateRequest);
-                        updateStatTask.Wait();
-                        if (updateStatTask.Result.Error != null)
-                            OutputPlayFabError("\t\tStatistics Definition Error: " + item.StatisticName, updateStatTask.Result.Error);
+                        var updateStatTask = await PlayFabAdminAPI.UpdatePlayerStatisticDefinitionAsync(updateRequest);
+                        //updateStatTask.Wait();
+                        if (updateStatTask.Error != null)
+                            OutputPlayFabError("\t\tStatistics Definition Error: " + item.StatisticName,
+                                updateStatTask.Error);
                         else
-                            LogToFile("\t\tStatistics Definition:" + item.StatisticName + " Updated", ConsoleColor.Green);
+                            LogToFile("\t\tStatistics Definition:" + item.StatisticName + " Updated",
+                                ConsoleColor.Green);
                     }
                     else
                     {
-                        OutputPlayFabError("\t\tStatistics Definition Error: " + item.StatisticName, createStatTask.Result.Error);
+                        OutputPlayFabError("\t\tStatistics Definition Error: " + item.StatisticName,
+                            createStatTask.Error);
                     }
                 }
                 else
@@ -209,10 +231,11 @@ namespace UploadGui
                     LogToFile("\t\tStatistics Definition: " + item.StatisticName + " Created", ConsoleColor.Green);
                 }
             }
+
             return true;
         }
 
-        public static bool UploadTitleNews()
+        public async Task<bool> UploadTitleNews()
         {
             if (string.IsNullOrEmpty(titleNewsPath))
                 return false;
@@ -232,10 +255,10 @@ namespace UploadGui
                     Body = item.Body
                 };
 
-                var addNewsTask = PlayFabAdminAPI.AddNewsAsync(request);
+                var addNewsTask = await PlayFabAdminAPI.AddNewsAsync(request);
 
-                if (addNewsTask.Result.Error != null)
-                    OutputPlayFabError("\t\tTitleNews Upload: " + item.Title, addNewsTask.Result.Error);
+                if (addNewsTask.Error != null)
+                    OutputPlayFabError("\t\tTitleNews Upload: " + item.Title, addNewsTask.Error);
                 else
                     LogToFile("\t\t" + item.Title + " Uploaded.", ConsoleColor.Green);
             }
@@ -243,7 +266,7 @@ namespace UploadGui
             return true;
         }
 
-        public static bool UploadCloudScript()
+        public async Task<bool> UploadCloudScript()
         {
             if (string.IsNullOrEmpty(cloudScriptPath))
                 return false;
@@ -256,7 +279,9 @@ namespace UploadGui
                 LogToFile("\tAn error occurred deserializing the CloudScript.js file.", ConsoleColor.Red);
                 return false;
             }
-            var files = new List<CloudScriptFile> {
+
+            var files = new List<CloudScriptFile>
+            {
                 new CloudScriptFile
                 {
                     Filename = "CloudScript.js",
@@ -270,12 +295,12 @@ namespace UploadGui
                 Files = files
             };
 
-            var updateCloudScriptTask = PlayFabAdminAPI.UpdateCloudScriptAsync(request);
-            updateCloudScriptTask.Wait();
+            var updateCloudScriptTask = await PlayFabAdminAPI.UpdateCloudScriptAsync(request);
+            //updateCloudScriptTask.Wait();
 
-            if (updateCloudScriptTask.Result.Error != null)
+            if (updateCloudScriptTask.Error != null)
             {
-                OutputPlayFabError("\tCloudScript Upload Error: ", updateCloudScriptTask.Result.Error);
+                OutputPlayFabError("\tCloudScript Upload Error: ", updateCloudScriptTask.Error);
                 return false;
             }
 
@@ -283,7 +308,7 @@ namespace UploadGui
             return true;
         }
 
-        public static bool UploadTitleData()
+        public async Task<bool> UploadTitleData()
         {
             if (string.IsNullOrEmpty(titleDataPath))
                 return false;
@@ -301,12 +326,11 @@ namespace UploadGui
                     Key = kvp.Key,
                     Value = kvp.Value
                 };
+                var setTitleDataTask = await PlayFabAdminAPI.SetTitleDataAsync(request);
+                //setTitleDataTask.Wait();
 
-                var setTitleDataTask = PlayFabAdminAPI.SetTitleDataAsync(request);
-                setTitleDataTask.Wait();
-
-                if (setTitleDataTask.Result.Error != null)
-                    OutputPlayFabError("\t\tTitleData Upload: " + kvp.Key, setTitleDataTask.Result.Error);
+                if (setTitleDataTask.Error != null)
+                    OutputPlayFabError("\t\tTitleData Upload: " + kvp.Key, setTitleDataTask.Error);
                 else
                     LogToFile("\t\t" + kvp.Key + " Uploaded.", ConsoleColor.Green);
             }
@@ -314,7 +338,7 @@ namespace UploadGui
             return true;
         }
 
-        public static bool UploadVc()
+        public async Task<bool> UploadVc()
         {
             LogToFile("Uploading Virtual Currency Settings...");
             var parsedFile = ParseFile(currencyPath);
@@ -324,12 +348,12 @@ namespace UploadGui
                 VirtualCurrencies = vcData
             };
 
-            var updateVcTask = PlayFabAdminAPI.AddVirtualCurrencyTypesAsync(request);
-            updateVcTask.Wait();
+            var updateVcTask = await PlayFabAdminAPI.AddVirtualCurrencyTypesAsync(request);
+            //updateVcTask.Wait();
 
-            if (updateVcTask.Result.Error != null)
+            if (updateVcTask.Error != null)
             {
-                OutputPlayFabError("\tVC Upload Error: ", updateVcTask.Result.Error);
+                OutputPlayFabError("\tVC Upload Error: ", updateVcTask.Error);
                 return false;
             }
 
@@ -337,7 +361,7 @@ namespace UploadGui
             return true;
         }
 
-        public static bool UploadCatalog(ref List<CatalogItem> reUploadList)
+        public async Task<bool> UploadCatalog(List<CatalogItem> reUploadList)
         {
             if (string.IsNullOrEmpty(catalogPath))
                 return false;
@@ -351,6 +375,7 @@ namespace UploadGui
                 LogToFile("\tAn error occurred deserializing the Catalog.json file.", ConsoleColor.Red);
                 return false;
             }
+
             for (var z = 0; z < catalogWrapper.Catalog.Count; z++)
             {
                 if (catalogWrapper.Catalog[z].Bundle != null || catalogWrapper.Catalog[z].Container != null)
@@ -364,10 +389,10 @@ namespace UploadGui
                 }
             }
 
-            return UpdateCatalog(catalogWrapper.Catalog);
+            return await UpdateCatalog(catalogWrapper.Catalog);
         }
 
-        public static bool UploadDropTables()
+        public async Task<bool> UploadDropTables()
         {
             if (string.IsNullOrEmpty(dropTablesPath))
                 return false;
@@ -398,12 +423,12 @@ namespace UploadGui
                 Tables = dropTables
             };
 
-            var updateResultTableTask = PlayFabAdminAPI.UpdateRandomResultTablesAsync(request);
-            updateResultTableTask.Wait();
+            var updateResultTableTask = await PlayFabAdminAPI.UpdateRandomResultTablesAsync(request);
+            //updateResultTableTask.Wait();
 
-            if (updateResultTableTask.Result.Error != null)
+            if (updateResultTableTask.Error != null)
             {
-                OutputPlayFabError("\tDropTable Upload Error: ", updateResultTableTask.Result.Error);
+                OutputPlayFabError("\tDropTable Upload Error: ", updateResultTableTask.Error);
                 return false;
             }
 
@@ -411,7 +436,7 @@ namespace UploadGui
             return true;
         }
 
-        public static bool UploadStores()
+        public async Task<bool> UploadStores()
         {
             if (string.IsNullOrEmpty(storesPath))
                 return false;
@@ -433,25 +458,28 @@ namespace UploadGui
                     MarketingData = eachStore.MarketingData
                 };
 
-                var updateStoresTask = PlayFabAdminAPI.SetStoreItemsAsync(request);
-                updateStoresTask.Wait();
+                var updateStoresTask = await PlayFabAdminAPI.SetStoreItemsAsync(request);
+                //updateStoresTask.Wait();
 
-                if (updateStoresTask.Result.Error != null)
-                    OutputPlayFabError("\t\tStore Upload: " + eachStore.StoreId, updateStoresTask.Result.Error);
+                if (updateStoresTask.Error != null)
+                    OutputPlayFabError("\t\tStore Upload: " + eachStore.StoreId, updateStoresTask.Error);
                 else
                     LogToFile("\t\tStore: " + eachStore.StoreId + " Uploaded. ", ConsoleColor.Green);
             }
+
             return true;
         }
 
-        public static bool UploadCdnAssets()
+        public async Task<bool> UploadCdnAssets()
         {
             if (string.IsNullOrEmpty(cdnAssetsPath))
                 return false;
 
             LogToFile("Uploading CDN AssetBundles...");
             var parsedFile = ParseFile(cdnAssetsPath);
-            var bundleNames = JsonWrapper.DeserializeObject<List<string>>(parsedFile); // TODO: This could probably just read the list of files from the directory
+            var bundleNames =
+                JsonWrapper.DeserializeObject<List<string>>(
+                    parsedFile); // TODO: This could probably just read the list of files from the directory
 
             if (bundleNames != null)
             {
@@ -461,7 +489,7 @@ namespace UploadGui
                     {
                         var key = cdnPlatformSubfolder[eachPlatform] + bundleName;
                         var path = cdnPath + key;
-                        UploadAsset(key, path);
+                        await UploadAsset(key, path);
                     }
                 }
             }
@@ -470,13 +498,17 @@ namespace UploadGui
                 LogToFile("\tAn error occurred deserializing CDN Assets: ", ConsoleColor.Red);
                 return false;
             }
+
             return true;
         }
+
         #endregion
 
         #region Helper Functions -- these functions help the main uploading functions
-        static void LogToFile(string content, ConsoleColor color = ConsoleColor.White)
+
+        void LogToFile(string content, ConsoleColor color = ConsoleColor.White)
         {
+            upLoadWinViewModel.consoleTBContent = upLoadWinViewModel.consoleTBContent + content;
             Console.ForegroundColor = color;
             Console.WriteLine(content);
             logStream.WriteLine(content);
@@ -484,7 +516,7 @@ namespace UploadGui
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        static void OutputPlayFabError(string context, PlayFabError err)
+        void OutputPlayFabError(string context, PlayFabError err)
         {
             hitErrors = true;
             LogToFile("\tAn error occurred during: " + context, ConsoleColor.Red);
@@ -504,7 +536,7 @@ namespace UploadGui
             LogToFile(string.Format("\t\t[{0}] -- {1}: {2} ", err.Error, err.ErrorMessage, details), ConsoleColor.Red);
         }
 
-        static string ParseFile(string path)
+        string ParseFile(string path)
         {
             var s = File.OpenText(path);
             var contents = s.ReadToEnd();
@@ -512,7 +544,7 @@ namespace UploadGui
             return contents;
         }
 
-        static CatalogItem CloneCatalogItemAndStripTables(CatalogItem strip)
+        CatalogItem CloneCatalogItemAndStripTables(CatalogItem strip)
         {
             if (strip == null)
                 return null;
@@ -529,8 +561,8 @@ namespace UploadGui
                 Tags = strip.Tags,
                 CustomData = strip.CustomData,
                 Consumable = strip.Consumable,
-                Container = null,//strip.Container, // Clearing this is the point
-                Bundle = null,//strip.Bundle, // Clearing this is the point
+                Container = null, //strip.Container, // Clearing this is the point
+                Bundle = null, //strip.Bundle, // Clearing this is the point
                 CanBecomeCharacter = strip.CanBecomeCharacter,
                 IsStackable = strip.CanBecomeCharacter,
                 IsTradable = strip.IsTradable,
@@ -538,7 +570,7 @@ namespace UploadGui
             };
         }
 
-        private static bool UpdateCatalog(List<CatalogItem> catalog)
+        private async Task<bool> UpdateCatalog(List<CatalogItem> catalog)
         {
             var request = new UpdateCatalogItemsRequest
             {
@@ -546,12 +578,12 @@ namespace UploadGui
                 Catalog = catalog
             };
 
-            var updateCatalogItemsTask = PlayFabAdminAPI.UpdateCatalogItemsAsync(request);
-            updateCatalogItemsTask.Wait();
+            var updateCatalogItemsTask = await PlayFabAdminAPI.UpdateCatalogItemsAsync(request);
+            //updateCatalogItemsTask.Wait();
 
-            if (updateCatalogItemsTask.Result.Error != null)
+            if (updateCatalogItemsTask.Error != null)
             {
-                OutputPlayFabError("\tCatalog Upload Error: ", updateCatalogItemsTask.Result.Error);
+                OutputPlayFabError("\tCatalog Upload Error: ", updateCatalogItemsTask.Error);
                 return false;
             }
 
@@ -559,7 +591,7 @@ namespace UploadGui
             return true;
         }
 
-        private static bool UploadAsset(string key, string path)
+        private async Task<bool> UploadAsset(string key, string path)
         {
             var request = new GetContentUploadUrlRequest()
             {
@@ -568,28 +600,28 @@ namespace UploadGui
             };
 
             LogToFile("\tFetching CDN endpoint for " + key);
-            var getContentUploadTask = PlayFabAdminAPI.GetContentUploadUrlAsync(request);
-            getContentUploadTask.Wait();
+            var getContentUploadTask = await PlayFabAdminAPI.GetContentUploadUrlAsync(request);
+            //getContentUploadTask.Wait();
 
-            if (getContentUploadTask.Result.Error != null)
+            if (getContentUploadTask.Error != null)
             {
-                OutputPlayFabError("\t\tAcquire CDN URL Error: ", getContentUploadTask.Result.Error);
+                OutputPlayFabError("\t\tAcquire CDN URL Error: ", getContentUploadTask.Error);
                 return false;
             }
 
-            var destUrl = getContentUploadTask.Result.Result.URL;
+            var destUrl = getContentUploadTask.Result.URL;
             LogToFile("\t\tAcquired CDN Address: " + key, ConsoleColor.Green);
 
             byte[] fileContents = File.ReadAllBytes(path);
 
-            return PutFile(key, destUrl, fileContents);
+            return await PutFile(key, destUrl, fileContents);
         }
 
-        private static bool PutFile(string key, string url, byte[] payload)
+        private async Task<bool> PutFile(string key, string url, byte[] payload)
         {
             LogToFile("\t\tStarting HTTP PUT for: " + key);
 
-            var request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest) WebRequest.Create(url);
             request.Method = "PUT";
             request.ContentType = "application/x-gzip";
 
@@ -605,32 +637,37 @@ namespace UploadGui
                 return false;
             }
 
-            var response = (HttpWebResponse)request.GetResponse();
+            var response = await request.GetResponseAsync();
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response != null)
             {
-                LogToFile("\t\t\tHTTP PUT Successful:" + key, ConsoleColor.Green);
-                return true;
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    LogToFile("\t\t\tHTTP PUT Successful:" + key, ConsoleColor.Green);
+                    return true;
+                }
             }
             else
             {
-                LogToFile(string.Format("\t\t\tERROR: Asset:{0} -- Code:[{1}] -- Msg:{2}", url, response.StatusCode, response.StatusDescription), ConsoleColor.Red);
+                LogToFile("\t\t\tHTTP PUT Successful:" + key, ConsoleColor.Red);
                 return false;
             }
+
+            #endregion
         }
-        #endregion
-    }
-    public class CatalogWrapper
-    {
-        public string CatalogVersion;
-        public List<CatalogItem> Catalog;
-    }
 
-    public class StoreWrapper
-    {
-        public string StoreId;
-        public List<StoreItem> Store;
-        public StoreMarketingModel MarketingData;
-    }
+        public class CatalogWrapper
+        {
+            public string CatalogVersion;
+            public List<CatalogItem> Catalog;
+        }
 
+        public class StoreWrapper
+        {
+            public string StoreId;
+            public List<StoreItem> Store;
+            public StoreMarketingModel MarketingData;
+        }
+
+    }
 }

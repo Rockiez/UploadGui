@@ -110,7 +110,7 @@
             <Button  Grid.Column="2" Grid.Row="12" Content="Clear" Margin="2"  Height="30" Command="{Binding CdnAssetsCleanCommand}"/>
             <Button  Grid.Column="3" Grid.Row="12" Content="Click" Margin="2"  Height="30" Command="{Binding CdnAssetsSelectCommand}" />
 
-            <Button  Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="13" Content="UPLOAD" Margin="2"  Height="30"  IsEnabled="{Binding Path=uploadButtonEnable}" Command="{Binding UploadCommand}" />
+            <Button Name="Test" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="13" Content="UPLOAD" Margin="2"  Height="30"  IsEnabled="True"  Command="{Binding UploadCommand}" />
 
             <Label Grid.Column="0" Grid.Row="15" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Log:" FontSize="16" />
             <Button Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="16" Content="STOP" Margin="2"  Height="30" Command="{Binding StopCommand}" >
@@ -118,7 +118,7 @@
             </Button>
 
             <TextBlock Name="consoleTB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="17" HorizontalAlignment="Center" Margin="2" Width="765" Background="#0C000000" />
-            <ProgressBar Name="uploadPB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="18" HorizontalAlignment="Center"  Margin="2" VerticalAlignment="Center" Width="765" Height="8" Value="0" />
+            <ProgressBar Name="uploadPB" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="18" HorizontalAlignment="Center"  Margin="2" VerticalAlignment="Center" Width="765" Height="8" Value="{Binding progressBarValue}" />
            
 
 

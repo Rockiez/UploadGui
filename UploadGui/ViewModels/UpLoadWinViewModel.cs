@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using PlayFab.UUnit;
 using UploadGui.Commands;
 
 namespace UploadGui.ViewModels
@@ -179,8 +180,8 @@ namespace UploadGui.ViewModels
             }
         }
 
-        private string _progressBarValue;
-        public string progressBarValue
+        private int _progressBarValue;
+        public int progressBarValue
         {
             get
             {
@@ -188,7 +189,7 @@ namespace UploadGui.ViewModels
             }
             set
             {
-                _consoleTBContent = value;
+                _progressBarValue = value;
                 NotifyPropertyChanged("progressBarValue");
             }
 
@@ -206,6 +207,7 @@ namespace UploadGui.ViewModels
                 NotifyPropertyChanged("uploadButtonEnable");
             }
         }
+        
 
 
         #endregion
@@ -221,8 +223,8 @@ namespace UploadGui.ViewModels
         private const string TitleDataFolderPath = "/TitleData.json";
         private const string CatalogFolderPath = "/Catalog.json";
         private const string DropTablesFolderPath = "/DropTables.json";
-        public const string CloudScriptFolderPath = "/CloudScript.js";
-        public const string TitleNewsFolderPath = "/TitleNews.json";
+        private const string CloudScriptFolderPath = "/CloudScript.js";
+        private const string TitleNewsFolderPath = "/TitleNews.json";
         private const string StatsDefFolderPath = "/StatisticsDefinitions.json";
         private const string StoresFolderPath = "/Stores.json";
         private const string CdnAssetsFolderPath = "/CdnData.json";
@@ -231,6 +233,7 @@ namespace UploadGui.ViewModels
         public DelegateCommand AssetFolderSelectCommand { get; set; }
         private void AssetFolder_Select(object sender)
         {
+            
             System.Windows.Forms.FolderBrowserDialog openFileDialog = new System.Windows.Forms.FolderBrowserDialog();
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -375,26 +378,59 @@ namespace UploadGui.ViewModels
 
         #endregion
 
+
         //Upload Json file with async
         public DelegateCommand UploadCommand { get; set; }
-        private async void Upload(object sender)
+        private void Upload(object sender)
         {
 
             uploadButtonEnable = false;
 
-            //do something
-            UploadGui.Upload.UploadAllJson(this);
+            var upload = new Upload(this);
+             upload.UploadAllJson();
             uploadButtonEnable = true;
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public DelegateCommand StopCommand { get; set; }
         private void Stop(object sender)
         {
 
         }
+        
 
-        //Binding
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
+        #region Binding
+
         public UpLoadWinViewModel()
         {
             uploadButtonEnable = true;
