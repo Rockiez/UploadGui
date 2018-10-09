@@ -11,6 +11,7 @@ using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.Json;
 using System.ComponentModel;
+using System.Threading;
 using UploadGui.ViewModels;
 
 
@@ -56,9 +57,11 @@ namespace UploadGui
         private FileInfo logFile;
         private StreamWriter logStream;
 
-        public async Task UploadAllJson()
-        {
+        private CancellationToken token;
 
+        public async Task UploadAllJson(CancellationToken token)
+        {
+            this.token = token;
             try
             {
                 // setup the log file
@@ -68,45 +71,40 @@ namespace UploadGui
                 // get the destination title settings
 
                 if (!GetTitleSettings())
+                {
                     throw new Exception("\tFailed to load Title Settings");
+                }
 
                 // start uploading
-                if (!await UploadTitleData())
-                    throw new Exception("\tFailed to upload TitleData.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 10;
-                }
-                if (!await UploadEconomyData())
-                    throw new Exception("\tFailed to upload Economy Data.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 20;
-                }
-                if (!await UploadCloudScript())
-                    throw new Exception("\tFailed to upload CloudScript.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 20;
-                }
-                if (!await UploadTitleNews())
-                    throw new Exception("\tFailed to upload TitleNews.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 20;
-                }
-                if (!await UploadStatisticDefinitions())
-                    throw new Exception("\tFailed to upload Statistics Definitions.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 20;
-                }
-                if (!await UploadCdnAssets())
-                    throw new Exception("\tFailed to upload CDN Assets.");
-                else
-                {
-                    upLoadWinViewModel.progressBarValue += 10;
-                }
+                if (token.IsCancellationRequested)  return;
+                upLoadWinViewModel.progressBarValue += !await UploadTitleData()
+                    ? throw new Exception("\tFailed to upload TitleData.")
+                    : 10;
+                if (token.IsCancellationRequested) return;
+
+                upLoadWinViewModel.progressBarValue += !await UploadEconomyData()
+                    ? throw new Exception("\tFailed to upload Economy Data.")
+                    : 20;
+                if (token.IsCancellationRequested) return;
+
+                upLoadWinViewModel.progressBarValue += !await UploadCloudScript()
+                    ? throw new Exception("\tFailed to upload CloudScript.")
+                    : 20;
+                if (token.IsCancellationRequested) return;
+
+                upLoadWinViewModel.progressBarValue += !await UploadTitleNews()
+                    ? throw new Exception("\tFailed to upload TitleNews.")
+                    : 20;
+                if (token.IsCancellationRequested) return;
+
+                upLoadWinViewModel.progressBarValue += !await UploadStatisticDefinitions()
+                    ? throw new Exception("\tFailed to upload Statistics Definitions.")
+                    : 20;
+                if (token.IsCancellationRequested) return;
+
+                upLoadWinViewModel.progressBarValue += !await UploadCdnAssets()
+                    ? throw new Exception("\tFailed to upload CDN Assets.")
+                    : 10;
             }
             catch (Exception ex)
             {
@@ -173,6 +171,7 @@ namespace UploadGui
         private async Task<bool> UploadEconomyData()
         {
             ////MUST upload these in this order so that the economy data is properly imported: VC -> Catalogs -> DropTables -> Stores
+
             if (!(await UploadVc()))
                 return false;
 
@@ -217,8 +216,9 @@ namespace UploadGui
                     AggregationMethod = item.AggregationMethod
                 };
 
+                if (token.IsCancellationRequested) return true;
+
                 var createStatTask = await PlayFabAdminAPI.CreatePlayerStatisticDefinitionAsync(request);
-                //createStatTask.Wait();
 
                 if (createStatTask.Error != null)
                 {
@@ -232,6 +232,8 @@ namespace UploadGui
                             VersionChangeInterval = item.VersionChangeInterval,
                             AggregationMethod = item.AggregationMethod
                         };
+
+                        if (token.IsCancellationRequested) return true;
 
                         var updateStatTask = await PlayFabAdminAPI.UpdatePlayerStatisticDefinitionAsync(updateRequest);
                         //updateStatTask.Wait();
@@ -276,6 +278,7 @@ namespace UploadGui
                     Title = item.Title,
                     Body = item.Body
                 };
+                if (token.IsCancellationRequested) return true;
 
                 var addNewsTask = await PlayFabAdminAPI.AddNewsAsync(request);
 
@@ -316,6 +319,7 @@ namespace UploadGui
                 Publish = true,
                 Files = files
             };
+            if (token.IsCancellationRequested) return true;
 
             var updateCloudScriptTask = await PlayFabAdminAPI.UpdateCloudScriptAsync(request);
             //updateCloudScriptTask.Wait();
@@ -348,6 +352,9 @@ namespace UploadGui
                     Key = kvp.Key,
                     Value = kvp.Value
                 };
+
+                if (token.IsCancellationRequested) return true;
+
                 var setTitleDataTask = await PlayFabAdminAPI.SetTitleDataAsync(request);
                 //setTitleDataTask.Wait();
 
@@ -369,6 +376,7 @@ namespace UploadGui
             {
                 VirtualCurrencies = vcData
             };
+            if (token.IsCancellationRequested) return true;
 
             var updateVcTask = await PlayFabAdminAPI.AddVirtualCurrencyTypesAsync(request);
             //updateVcTask.Wait();
@@ -444,6 +452,7 @@ namespace UploadGui
                 CatalogVersion = defaultCatalog,
                 Tables = dropTables
             };
+            if (token.IsCancellationRequested) return true;
 
             var updateResultTableTask = await PlayFabAdminAPI.UpdateRandomResultTablesAsync(request);
             //updateResultTableTask.Wait();
@@ -479,6 +488,7 @@ namespace UploadGui
                     Store = eachStore.Store,
                     MarketingData = eachStore.MarketingData
                 };
+                if (token.IsCancellationRequested) return true;
 
                 var updateStoresTask = await PlayFabAdminAPI.SetStoreItemsAsync(request);
                 //updateStoresTask.Wait();
@@ -599,6 +609,7 @@ namespace UploadGui
                 CatalogVersion = defaultCatalog,
                 Catalog = catalog
             };
+            if (token.IsCancellationRequested) return true;
 
             var updateCatalogItemsTask = await PlayFabAdminAPI.UpdateCatalogItemsAsync(request);
             //updateCatalogItemsTask.Wait();
@@ -622,6 +633,8 @@ namespace UploadGui
             };
 
             LogToFile("\tFetching CDN endpoint for " + key);
+            if (token.IsCancellationRequested) return true;
+
             var getContentUploadTask = await PlayFabAdminAPI.GetContentUploadUrlAsync(request);
             //getContentUploadTask.Wait();
 

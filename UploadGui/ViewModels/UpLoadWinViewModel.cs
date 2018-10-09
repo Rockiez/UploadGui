@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using PlayFab.UUnit;
 using UploadGui.Commands;
 
@@ -207,7 +209,20 @@ namespace UploadGui.ViewModels
                 NotifyPropertyChanged("uploadButtonEnable");
             }
         }
-        
+        private bool _stopUploadButtonEnable;
+        public bool stopUploadButtonEnable
+        {
+            get
+            {
+                return _stopUploadButtonEnable;
+            }
+            set
+            {
+                _stopUploadButtonEnable = value;
+                NotifyPropertyChanged("stopUploadButtonEnable");
+            }
+        }
+
 
 
         #endregion
@@ -380,27 +395,42 @@ namespace UploadGui.ViewModels
 
 
         //Upload Json file with async
-        public DelegateCommand UploadCommand { get; set; }
-        private void Upload(object sender)
+        private Upload _upload;
+        private CancellationTokenSource _cancelUploadTokenSource;
+        public  DelegateCommand UploadCommand { get; set; }
+        private async void Upload(object sender)
         {
+            stopUploadButtonEnable = true;
             uploadButtonEnable = false;
-            var upload = new Upload(this);
-            var uploadTask = upload.UploadAllJson();
-            uploadTask.ContinueWith((t, o) => { uploadButtonEnable = true; }, this);
+
+            _upload = new Upload(this);
+            _cancelUploadTokenSource = new CancellationTokenSource();
+
+            await _upload.UploadAllJson(_cancelUploadTokenSource.Token);
+
+            uploadButtonEnable = true;
+            stopUploadButtonEnable = false;
+        }
+
+
+
+
+        public DelegateCommand StopCommand { get; set; }
+        private void Stop(object sender)
+        {
+            consoleTBContent = "Now cancelling all tasks \n" + consoleTBContent;
+            _cancelUploadTokenSource.Cancel();
         }
 
         private bool CanUpload(object sender)
         {
             return uploadButtonEnable == true ? true : false;
         }
-
-
-        public DelegateCommand StopCommand { get; set; }
-        private void Stop(object sender)
+        private bool CanStop(object sender)
         {
-
+            return stopUploadButtonEnable == true ? true : false;
         }
-        
+
 
 
 
@@ -424,7 +454,7 @@ namespace UploadGui.ViewModels
         public UpLoadWinViewModel()
         {
             uploadButtonEnable = true;
-
+            stopUploadButtonEnable = false;
             //Select Command Binding
             AssetFolderSelectCommand = new DelegateCommand
             {
@@ -530,10 +560,11 @@ namespace UploadGui.ViewModels
 
             StopCommand = new DelegateCommand
             {
-                ExecuteAction = Stop
+                ExecuteAction = Stop,
+                //CanExecutePre = CanStop
+
             };
         }
-
 
 
         #endregion
