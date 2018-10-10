@@ -7,23 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" Height="341"  VerticalAlignment="Top" Width="400" Margin="20">
-            <Label HorizontalAlignment="Center" Margin="20" Content="Welcome to Playfab"/>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="200" Margin="10">
-                <Label Width="100" >Username:</Label>
-                <TextBox Height="22" TextWrapping="Wrap" Width="100"  Name="UsernameText" Text="a@b.c" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal"  Width="200" Margin="10" >
-                <Label Width="100" >Password:</Label>
-                <TextBox Height="22" TextWrapping="Wrap"  Width="100" Name="PasswordText" Text="123" TextChanged="PasswordText_TextChanged"/>
-            </StackPanel>
-
-            <Button Content="Login" Width="100" Margin="10" Click="Button_Click"/>
+            <Frame Margin="5" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}" />
 
 
-
-        </StackPanel>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using PlayFab;
 using PlayFab.AdminModels;
 using PlayFab.Json;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Threading;
 using UploadGui.ViewModels;
 
@@ -116,6 +117,10 @@ namespace UploadGui
                 var status = hitErrors
                     ? "ended with errors. See PreviousUploadLog.txt for details"
                     : "ended successfully!";
+                if (token.IsCancellationRequested)
+                {
+                    status = "ended by Cancelled Operation.";
+                }
                 var color = hitErrors ? ConsoleColor.Red : ConsoleColor.White;
 
                 LogToFile("UB_Uploader.exe " + status, color);
@@ -688,8 +693,9 @@ namespace UploadGui
                 return false;
             }
 
-            #endregion
+            
         }
+        #endregion
 
         public class CatalogWrapper
         {
