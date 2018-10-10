@@ -17,19 +17,15 @@ using UploadGui.ViewModels;
 namespace UploadGui
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TitleSettingPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TitleSettingPage : Page
     {
-        public MainWindow()
+        public TitleSettingPage(UserAuthenticateViewModel ua)
         {
             InitializeComponent();
-            this.DataContext = new UserAuthenticateViewModel();
-
+            this.DataContext = ua;
         }
 
-
     }
-
-    }
-
+}

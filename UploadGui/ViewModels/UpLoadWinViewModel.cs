@@ -418,7 +418,7 @@ namespace UploadGui.ViewModels
         public DelegateCommand StopCommand { get; set; }
         private void Stop(object sender)
         {
-            consoleTBContent = "Now cancelling all tasks \n" + consoleTBContent;
+            consoleTBContent = "\n Now cancelling all tasks \n" + consoleTBContent;
             _cancelUploadTokenSource.Cancel();
         }
 
