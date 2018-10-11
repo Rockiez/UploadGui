@@ -13,20 +13,22 @@
             <Label HorizontalAlignment="Center" Margin="20,20,20,0" Content="Playfab"/>
             <Label HorizontalAlignment="Center" Margin="20,0,20,0" Content="Settings"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="250" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Margin="10">
                 <Label Width="150" >STUDIO:</Label>
-                <TextBox Height="22" TextWrapping="Wrap" Width="100"  Name="UsernameText" Text="a@b.c" />
+                <ComboBox Height="22" Width="150" >
+
+                </ComboBox>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Width="250" Margin="10" >
+            <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
                 <Label Width="150" >TITLE ID:</Label>
-                <TextBox Height="22" TextWrapping="Wrap"  Width="100" Name="PasswordText" Text="123" />
-            </StackPanel>
+                <ComboBox Height="22" Width="150" >
+                </ComboBox>            </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Width="250" Margin="10" >
+            <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
                 <Label Width="150" >DEVELOPER SECRET KEY:</Label>
-                <TextBox Height="22" TextWrapping="Wrap"  Width="100"  Text="123"  IsReadOnly="True" />
-                    
+                <ComboBox Height="22" Width="150" >
+                </ComboBox>                    
             </StackPanel>
 
 

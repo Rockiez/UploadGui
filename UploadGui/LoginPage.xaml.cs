@@ -26,6 +26,6 @@ namespace UploadGui
             InitializeComponent();
             this.DataContext = ua;
         }
-
     }
+
 }

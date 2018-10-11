@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PlayFab.UUnit;
 using UploadGui.Commands;
+using UploadGui.Services;
 
 namespace UploadGui.ViewModels
 {
@@ -395,7 +396,7 @@ namespace UploadGui.ViewModels
 
 
         //Upload Json file with async
-        private Upload _upload;
+        private UploadService _upload;
         private CancellationTokenSource _cancelUploadTokenSource;
         public  DelegateCommand UploadCommand { get; set; }
         private async void Upload(object sender)
@@ -403,7 +404,7 @@ namespace UploadGui.ViewModels
             stopUploadButtonEnable = true;
             uploadButtonEnable = false;
 
-            _upload = new Upload(this);
+            _upload = new UploadService(this);
             _cancelUploadTokenSource = new CancellationTokenSource();
 
             await _upload.UploadAllJson(_cancelUploadTokenSource.Token);
