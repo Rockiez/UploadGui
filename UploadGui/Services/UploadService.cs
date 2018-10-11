@@ -16,9 +16,9 @@ using System.Threading;
 using UploadGui.ViewModels;
 
 
-namespace UploadGui
+namespace UploadGui.Services
 {
-    public class Upload
+    public class UploadService
     {
         private string defaultCatalog = null; // Determined by TitleSettings.json
         private bool hitErrors;
@@ -38,7 +38,7 @@ namespace UploadGui
 
         private UpLoadWinViewModel upLoadWinViewModel;
 
-        public Upload(UpLoadWinViewModel upLoadWinViewModel)
+        public UploadService(UpLoadWinViewModel upLoadWinViewModel)
         {
             this.upLoadWinViewModel = upLoadWinViewModel;
 
