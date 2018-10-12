@@ -17,12 +17,6 @@ namespace UploadGui.Services
             PlayFabEditorHttpService.MakeApiCall("/DeveloperTools/User/Login","https://editor.playfabapi.com", request, resultCallback);
         }
 
-        public static void Logout(LogoutRequest request, Action<LogoutResult> resultCallback,
-            Action<PlayFabError> errorCb)
-        {
-            PlayFabEditorHttpService.MakeApiCall("/DeveloperTools/User/Logout", "https://editor.playfabapi.com", request, resultCallback);
-        }
-
         public static void GetStudios(GetStudiosRequest request, Action<GetStudiosResult> resultCallback)
         {
             var token = PlayFabEditorPrefsSO.Instance.DevAccountToken;
@@ -32,7 +26,7 @@ namespace UploadGui.Services
 
 
         #region FROM ADMIN / SERVER API SETS ----------------------------------------------------------------------------------------------------------------------------------------
-        public static void GetTitleData(Action<GetTitleDataResult> resultCb, Action<PlayFabError> errorCb)
+        public static void GetTitleData(Action<GetTitleDataResult> resultCb)
         {
             var titleId = PlayFabEditorDataService.SharedSettings.TitleId;
             var apiEndpoint = "https://" + titleId + ".playfabapi.com";
@@ -40,12 +34,6 @@ namespace UploadGui.Services
         }
 
 
-        public static void GetTitleInternalData(Action<GetTitleDataResult> resultCb, Action<PlayFabError> errorCb)
-        {
-            var titleId = PlayFabEditorDataService.SharedSettings.TitleId;
-            var apiEndpoint = "https://" + titleId + ".playfabapi.com";
-            PlayFabEditorHttpService.MakeApiCall("/Admin/GetTitleInternalData", apiEndpoint, new GetTitleDataRequest(), resultCb);
-        }
 
         #endregion
     }

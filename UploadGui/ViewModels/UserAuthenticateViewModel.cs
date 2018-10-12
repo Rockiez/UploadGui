@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using UploadGui.Commands;
 using Dapper;
 using UploadGui.Models;
@@ -18,19 +19,73 @@ namespace UploadGui.ViewModels
     {
 
         #region Content of control
-        private Page _CurrentPage;
+        private Page _currentPage;
         public Page CurrentPage
         {
             get
             {
-                return _CurrentPage;
+                return _currentPage;
             }
             set
             {
-                _CurrentPage = value;
+                _currentPage = value;
                 NotifyPropertyChanged("CurrentPage");
             }
         }
+
+        private string _username;
+        public string Username
+        {
+            get
+            {
+                return _username;
+            }
+            set
+            {
+                _username = value;
+                NotifyPropertyChanged("Username");
+            }
+        }
+
+        private string _password;
+        public string Password
+        {
+            get
+            {
+                return _password;
+            }
+            set
+            {
+                _password = value;
+                NotifyPropertyChanged("Password");
+            }
+        }
+
+        private IList<string> _studioComboList;
+        private string _studioSelected;
+
+        public IList<string> StudioComboList
+        {
+            get { return _studioComboList; }
+            set
+            {
+                _studioComboList = value;
+                NotifyPropertyChanged("StudioComboList");
+            }
+        }
+        public string StudioSelected
+        {
+            get
+            {
+                return _studioSelected;
+            }
+            set
+            {
+                _studioSelected = value;
+                NotifyPropertyChanged("StudioSelected");
+            }
+        }
+
         #endregion
 
 
@@ -51,66 +106,52 @@ namespace UploadGui.ViewModels
 
         }
 
-        public DelegateCommand LoginCommand { get; set; }
-        private void Login(object sender)
-        {
-            CurrentPage = new TitleSettingPage(this);
-        }
 
 
-        public UserAuthenticateViewModel()
-        {
-            CurrentPage = new LoginPage(this);
-            LoginCommand = new DelegateCommand
-            {
-                ExecuteAction = Login
-            };
-            NextCommand = new DelegateCommand
-            {
-                ExecuteAction = Next
-            };
-        }
 
-        #region menu and helper methods
 
-        private static string _userEmail = string.Empty;
-        private static string _userPass = string.Empty;
+        #region helper methods
+        
         public static bool IsAuthenticated()
         {
             return !string.IsNullOrEmpty(PlayFabEditorPrefsSO.Instance.DevAccountToken);
         }
-        
-        
-        private static void OnLoginButtonClicked()
+
+        public DelegateCommand LoginCommand { get; set; }
+
+        private void Login(object sender)
         {
             PlayFabEditorApi.Login(new LoginRequest()
             {
                 DeveloperToolProductName = "PlayFab_EditorExtensions",
                 DeveloperToolProductVersion = "2.53.181001",
-                Email = _userEmail,
-                Password = _userPass
+                Email = Username,
+                Password = this.Password
             }, (result) =>
             {
                 PlayFabEditorPrefsSO.Instance.DevAccountToken = result.DeveloperClientToken;
-                PlayFabEditorPrefsSO.Instance.DevAccountEmail = _userEmail;
+                PlayFabEditorPrefsSO.Instance.DevAccountEmail = Username;
                 PlayFabEditorDataService.RefreshStudiosList();
 
             });
+
+            RefreshTitleData();
+            CurrentPage = new TitleSettingPage(this);
         }
 
 
-        private static void OnStudioChange(Studio newStudio)
+        private  void OnStudioChange(Studio newStudio)
         {
             var newTitleId = (newStudio.Titles == null || newStudio.Titles.Length == 0) ? "" : newStudio.Titles[0].Id;
             OnTitleIdChange(newTitleId);
         }
 
-        private static void OnTitleChange(Title newTitle)
+        private  void OnTitleChange(Title newTitle)
         {
             OnTitleIdChange(newTitle.Id);
         }
 
-        private static void OnTitleIdChange(string newTitleId)
+        private void OnTitleIdChange(string newTitleId)
         {
             var studio = GetStudioForTitleId(newTitleId);
             PlayFabEditorPrefsSO.Instance.SelectedStudio = studio.Name;
@@ -120,7 +161,7 @@ namespace UploadGui.ViewModels
 #endif
             PlayFabEditorPrefsSO.Instance.TitleDataCache.Clear();
         }
-        private static Studio GetStudioForTitleId(string titleId)
+        private Studio GetStudioForTitleId(string titleId)
         {
             if (PlayFabEditorPrefsSO.Instance.StudioList == null)
                 return Studio.OVERRIDE;
@@ -132,6 +173,38 @@ namespace UploadGui.ViewModels
             return Studio.OVERRIDE;
         }
 
+        public readonly List<KvpItem> items = new List<KvpItem>();
+
+        public void RefreshTitleData()
+        {
+            Action<GetTitleDataResult> dataRequest = (result) =>
+            {
+                items.Clear();
+                foreach (var kvp in result.Data)
+                    items.Add(new KvpItem(kvp.Key, kvp.Value));
+
+                PlayFabEditorPrefsSO.Instance.TitleDataCache.Clear();
+                foreach (var pair in result.Data)
+                    PlayFabEditorPrefsSO.Instance.TitleDataCache.Add(pair.Key, pair.Value);
+            };
+
+            PlayFabEditorApi.GetTitleData(dataRequest);
+        }
+
         #endregion
+        public UserAuthenticateViewModel()
+        {
+            CurrentPage = new LoginPage(this);
+            Username = "renhe@wicresoft.com";
+            Password = "199658Renhe";
+            LoginCommand = new DelegateCommand
+            {
+                ExecuteAction = Login
+            };
+            NextCommand = new DelegateCommand
+            {
+                ExecuteAction = Next
+            };
+        }
     }
 }
