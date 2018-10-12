@@ -170,5 +170,7 @@ namespace UploadGui.Services
                 PlayFabEditorPrefsSO.Instance.StudioList.Add(Studio.OVERRIDE);
             });
         }
+
+ 
     }
 }

@@ -14,14 +14,14 @@
         <StackPanel HorizontalAlignment="Center" Height="341"  VerticalAlignment="Top" Width="400" Margin="20">
             <Label HorizontalAlignment="Center" Margin="20" Content="Welcome to Playfab"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="200" Margin="10">
-                <Label Width="100" Content="Username:" />
-                <TextBox Height="22" TextWrapping="Wrap" Width="100"  x:Name="UsernameText" Text="a@b.c" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Margin="10">
+                <Label Width="100" Content="Email:" />
+                <TextBox Height="22" AutoWordSelection="True" TextWrapping="Wrap" Width="200"  x:Name="UsernameText"  Text="{Binding  Path=Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Width="200" Margin="10" >
+            <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
                 <Label Width="100" Content="Password:" />
-                <TextBox Height="22" TextWrapping="Wrap"  Width="100" x:Name="PasswordText" Text="123"/>
+                <TextBox Height="22" TextWrapping="Wrap"  Width="200" x:Name="PasswordText" Text="{Binding  Path=Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </StackPanel>
 
             <Button Content="Login" Height="25" Width="100" Margin="10" Command="{Binding LoginCommand}" >

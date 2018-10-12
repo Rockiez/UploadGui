@@ -36,21 +36,7 @@ namespace UploadGui.Services
         public const int DEFAULT_LOCAL_OUTPUT_INDEX = 8; // The default format if you want to use local time (This doesn't have universal support in all PlayFab code)
         private static DateTimeStyles _dateTimeStyles = DateTimeStyles.RoundtripKind;
 
-        public static string timeStamp
-        {
-            get { return DateTime.Now.ToString(_defaultDateTimeFormats[DEFAULT_LOCAL_OUTPUT_INDEX]); }
-        }
 
-
-        public static string utcTimeStamp
-        {
-            get { return DateTime.UtcNow.ToString(_defaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX]); }
-        }
-
-        public static string Format(string text, params object[] args)
-        {
-            return args.Length > 0 ? string.Format(text, args) : text;
-        }
 
         public static MyJsonSerializerStrategy ApiSerializerStrategy = new MyJsonSerializerStrategy();
         public class MyJsonSerializerStrategy : PocoJsonSerializerStrategy
@@ -67,11 +53,7 @@ namespace UploadGui.Services
                 Type underType = Nullable.GetUnderlyingType(type);
                 if (underType != null)
                     return DeserializeObject(value, underType);
-#if NETFX_CORE
-                else if (type.GetTypeInfo().IsEnum)
-#else
-                else if (type.IsEnum)
-#endif
+                if (type.IsEnum)
                     return Enum.Parse(type, (string)value, true);
                 else if (type == typeof(DateTime))
                 {
@@ -95,11 +77,8 @@ namespace UploadGui.Services
             /// </summary>
             protected override bool TrySerializeKnownTypes(object input, out object output)
             {
-#if NETFX_CORE
-                if (input.GetType().GetTypeInfo().IsEnum)
-#else
+
                 if (input.GetType().IsEnum)
-#endif
                 {
                     output = input.ToString();
                     return true;

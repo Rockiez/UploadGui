@@ -15,9 +15,8 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Margin="10">
                 <Label Width="150" >STUDIO:</Label>
-                <ComboBox Height="22" Width="150" >
-
-                </ComboBox>
+                <ComboBox Height="22" Width="150"  ItemsSource="{Binding Path=StudioComboList}"
+                          SelectedValue="{Binding Path=StudioSelected}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
