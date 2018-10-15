@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PlayFab.UUnit;
 using UploadGui.Commands;
+using UploadGui.Models;
 using UploadGui.Services;
 
 namespace UploadGui.ViewModels
@@ -433,29 +434,16 @@ namespace UploadGui.ViewModels
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        public Title sTitle;
 
         #endregion
         #region Binding
 
-        public UpLoadWinViewModel()
+        public UpLoadWinViewModel(Title sTitle)
         {
             uploadButtonEnable = true;
             stopUploadButtonEnable = false;
+            this.sTitle = sTitle;
             //Select Command Binding
             AssetFolderSelectCommand = new DelegateCommand
             {

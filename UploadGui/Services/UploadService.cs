@@ -25,7 +25,7 @@ namespace UploadGui.Services
 
 
         public string currencyPath = "./Currency.json";
-        public string titleSettingsPath = "./TitleSettings.json";
+        //public string titleSettingsPath = "./TitleSettings.json";
         public string titleDataPath = "./TitleData.json";
         public string catalogPath = "./Catalog.json";
         public string dropTablesPath = "./DropTables.json";
@@ -150,22 +150,16 @@ namespace UploadGui.Services
 
         public bool GetTitleSettings()
         {
-            var parsedFile = ParseFile(titleSettingsPath);
 
-            var titleSettings = JsonWrapper.DeserializeObject<Dictionary<string, string>>(parsedFile);
-
-            if (titleSettings != null &&
-                titleSettings.TryGetValue("TitleId", out PlayFabSettings.TitleId) &&
-                !string.IsNullOrEmpty(PlayFabSettings.TitleId) &&
-                titleSettings.TryGetValue("DeveloperSecretKey", out PlayFabSettings.DeveloperSecretKey) &&
-                !string.IsNullOrEmpty(PlayFabSettings.DeveloperSecretKey) &&
-                titleSettings.TryGetValue("CatalogName", out defaultCatalog))
+            if (upLoadWinViewModel.sTitle != null)
             {
+                PlayFabSettings.TitleId = upLoadWinViewModel.sTitle.Id;
+                PlayFabSettings.DeveloperSecretKey = upLoadWinViewModel.sTitle.SecretKey;
                 LogToFile("Setting Destination TitleId to: " + PlayFabSettings.TitleId);
                 LogToFile("Setting DeveloperSecretKey to: " + PlayFabSettings.DeveloperSecretKey);
-                LogToFile("Setting defaultCatalog name to: " + defaultCatalog);
                 return true;
             }
+
 
             LogToFile("An error occurred when trying to parse TitleSettings.json", ConsoleColor.Red);
             return false;

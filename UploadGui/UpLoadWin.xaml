@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UploadGui"
         mc:Ignorable="d"
-        Title="UpLoadWin" Height="900" Width="800">
+        Title="UpLoadWin" Height="900" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid Margin="10" >
             <Grid.ColumnDefinitions>

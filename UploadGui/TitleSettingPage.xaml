@@ -13,25 +13,28 @@
             <Label HorizontalAlignment="Center" Margin="20,20,20,0" Content="Playfab"/>
             <Label HorizontalAlignment="Center" Margin="20,0,20,0" Content="Settings"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="350" Margin="10">
                 <Label Width="150" >STUDIO:</Label>
-                <ComboBox Height="22" Width="150"  ItemsSource="{Binding Path=StudioComboList}"
-                          SelectedValue="{Binding Path=StudioSelected}" />
+                <ComboBox Height="22" Width="200" IsEnabled="{Binding ComboboxEnbale}"  ItemsSource="{Binding StudioList}" 
+                          SelectedItem="{Binding Path=SStudio}"  
+                            />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
+            <StackPanel Orientation="Horizontal"  Width="350" Margin="10" >
                 <Label Width="150" >TITLE ID:</Label>
-                <ComboBox Height="22" Width="150" >
-                </ComboBox>            </StackPanel>
+                <ComboBox Height="22" Width="200" IsEnabled="{Binding ComboboxEnbale}" ItemsSource="{Binding TitleList}" 
+                          SelectedItem="{Binding Path=STitle}"/>
+                        </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
+            <StackPanel Orientation="Horizontal"  Width="350" Margin="10" >
                 <Label Width="150" >DEVELOPER SECRET KEY:</Label>
-                <ComboBox Height="22" Width="150" >
-                </ComboBox>                    
+                <Border BorderThickness="1" BorderBrush="#FF646464">
+                    <TextBlock Height="22" Width="198" TextTrimming="CharacterEllipsis" IsEnabled="{Binding ComboboxEnbale}" Text="{Binding STitleSecretKey}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" />
+                </Border>
             </StackPanel>
 
 
-            <Button Content="Next" Height="25" Width="100" Margin="10" Command="{Binding NextCommand}" />
+            <Button Content="Next" Height="25" Width="100" Margin="10" Command="{Binding NextCommand}" IsEnabled="{Binding NextButtonEnable}" />
 
 
         </StackPanel>

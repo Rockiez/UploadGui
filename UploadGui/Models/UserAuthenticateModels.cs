@@ -40,6 +40,10 @@ namespace UploadGui.Models
         public string Name;
         public string SecretKey;
         public string GameManagerUrl;
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public class Studio
@@ -65,6 +69,10 @@ namespace UploadGui.Models
         {
             var title = GetTitle(titleId);
             return title == null ? "" : title.SecretKey;
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 

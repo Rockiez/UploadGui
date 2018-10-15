@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.ComponentModel;
+using UploadGui.Models;
 using UploadGui.ViewModels;
 
 namespace UploadGui
@@ -24,10 +25,10 @@ namespace UploadGui
     public partial class UpLoadWin : Window
     {
 
-        public UpLoadWin()
+        public UpLoadWin(Title sTitle)
         {
             InitializeComponent();
-            this.DataContext = new UpLoadWinViewModel();
+            this.DataContext = new UpLoadWinViewModel(sTitle);
            
         }
     }

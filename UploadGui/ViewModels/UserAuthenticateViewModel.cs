@@ -22,6 +22,7 @@ namespace UploadGui.ViewModels
         {
             CurrentPage = new LoginPage(this);
             LoginButtonEnable = true;
+            NextButtonEnable = false;
             Username = "renhe@wicresoft.com";
             Password = "199658Renhe";
             LoginCommand = new DelegateCommand
@@ -34,7 +35,7 @@ namespace UploadGui.ViewModels
             };
         }
 
-        #region Content of control
+        #region data binding
         private Page _currentPage;
         public Page CurrentPage
         {
@@ -98,28 +99,151 @@ namespace UploadGui.ViewModels
                 NotifyPropertyChanged("StudioList");
             }
         }
+        private Studio _sStudio;
+        public Studio SStudio
+        {
+            get { return _sStudio; }
+            set
+            {
+                _sStudio = value;
+                TitleList = value.Titles;
+                NotifyPropertyChanged("SStudio");
+            }
+        }
+
+
+        private bool _comboboxEnable;
+        public bool ComboboxEnbale
+        {
+            get { return _comboboxEnable; }
+            set
+            {
+                _comboboxEnable = value;
+                NotifyPropertyChanged("ComboboxEnbale");
+            }
+        }
+
+        private Title[] _titleList;
+        public Title[] TitleList
+        {
+            get { return _titleList; }
+            set
+            {
+                _titleList = value;
+                NotifyPropertyChanged("TitleList");
+            }
+        }
+
+        private Title _sTitle;
+        public Title STitle
+        {
+            get { return _sTitle; }
+            set
+            {
+                _sTitle = value;
+                STitleSecretKey = STitle.SecretKey;
+                NotifyPropertyChanged("STitle");
+            }
+        }
+
+
+        private string _sTitleSecretKey;
+        public string STitleSecretKey
+        {
+            get { return _sTitleSecretKey; }
+            set
+            {
+                _sTitleSecretKey = value;
+                NextButtonEnable = true;
+                NotifyPropertyChanged("STitleSecretKey");
+            }
+        }
+
+        private bool _nextButtonEnable;
+        public bool NextButtonEnable
+        {
+            get { return _nextButtonEnable; }
+            set
+            {
+                _nextButtonEnable = value;
+                NotifyPropertyChanged("NextButtonEnable");
+            }
+        }
+
+        #endregion
+
+
+        #region command binding
+        public DelegateCommand NextCommand { get; set; }
+        private void Next(object sender)
+        {
+
+            UpLoadWin w2 = new UpLoadWin(STitle);
+            Application.Current.MainWindow?.Close();
+            Application.Current.MainWindow = w2;
+            w2.Show();
+
+        }
+        public DelegateCommand LoginCommand { get; set; }
+        private async void Login(object sender)
+        {
+            if (EmailValidation(Username))
+            {
+
+                var passwordBox = sender as PasswordBox;
+                var password = passwordBox.Password.Trim();
+                LoginButtonEnable = false;
+                await UserAuthenticateApiService.Login(new LoginRequest()
+                {
+                    DeveloperToolProductName = "PlayFab_EditorExtensions",
+                    DeveloperToolProductVersion = "2.53.181001",
+                    Email = Username,
+                    Password = password
+                }, async (result) =>
+                {
+                    _devAccountToken = result.DeveloperClientToken;
+                    ComboboxEnbale = false;
+                    await GetStudiosList();
+                    ComboboxEnbale = true;
+                });
+                LoginButtonEnable = true;
+                using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
+                {
+                    var insertFlag = true;
+                    SqlCommand queryCommand = new SqlCommand($"select Email from EmailTable ", connection);
+                    queryCommand.Connection.Open();
+                    SqlDataReader reader = queryCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Console.WriteLine(reader["Email"].ToString());
+                        if (reader["Email"].ToString() == Username)
+                        {
+                            insertFlag = false;
+                        }
+                    }
+                    reader.Close();
+                    
+                    if (insertFlag)
+                    {
+                        SqlCommand insertCommand = new SqlCommand($"INSERT INTO EmailTable(Email) VALUES('{Username}')", connection);
+                        insertCommand.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            else
+            {
+                MessageBox.Show("Input string not match Email Format");
+            }
+            CurrentPage = new TitleSettingPage(this);
+        }
 
 
 
         #endregion
 
 
-
-        public DelegateCommand NextCommand { get; set; }
-        private void Next(object sender)
-        {
-          
-            UpLoadWin w2 = new UpLoadWin();
-            Application.Current.MainWindow?.Close();
-            Application.Current.MainWindow = w2;
-            w2.Show();
-            using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
-            {
-            }
-            
-        }
-
-
+        #region helper methods
         public bool EmailValidation(string email)
         {
             if (email != null && email is string)
@@ -138,39 +262,11 @@ namespace UploadGui.ViewModels
             return false;
         }
 
-
-        #region helper methods
-
         private string _devAccountToken;
-        public DelegateCommand LoginCommand { get; set; }
-
-        private async void Login(object sender)
-        {
-            if (EmailValidation(Username))
-            {
-                LoginButtonEnable = false;
-                await UserAuthenticateApiService.Login(new LoginRequest()
-                {
-                    DeveloperToolProductName = "PlayFab_EditorExtensions",
-                    DeveloperToolProductVersion = "2.53.181001",
-                    Email = Username,
-                    Password = this.Password
-                }, async (result) =>
-                {
-                    _devAccountToken = result.DeveloperClientToken;
-                    await GetStudiosList();
-                });
-                LoginButtonEnable = true;
-            }
-            else
-            {
-                MessageBox.Show("Input string not match Email Format");
-            }
-            CurrentPage = new TitleSettingPage(this);
-        }
-
+       
         public async Task GetStudiosList()
         {
+
             if (string.IsNullOrEmpty(_devAccountToken))
                 return;
 

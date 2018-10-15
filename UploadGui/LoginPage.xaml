@@ -26,10 +26,10 @@
 
             <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
                 <Label Width="100" Content="Password:" />
-                <TextBox Height="22" TextWrapping="Wrap"  Width="200" Text="{Binding  Path=Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <PasswordBox Height="22"  Width="200" Name="txtPassword" />
             </StackPanel>
 
-            <Button Content="Login" Height="25" Width="100" Margin="10" Command="{Binding LoginCommand}" IsEnabled="{Binding LoginButtonEnable}" >
+            <Button Content="Login" Height="25" Width="100" Margin="10" Command="{Binding LoginCommand}" IsEnabled="{Binding LoginButtonEnable}" CommandParameter="{Binding ElementName=txtPassword}" >
     
             </Button>
 
