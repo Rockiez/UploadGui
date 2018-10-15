@@ -72,13 +72,11 @@
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\EditorModels.cs" />
+    <Compile Include="Models\UserAuthenticateModels.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Services\PlayFabApiService.cs" />
-    <Compile Include="Services\PlayFabEditorDataService.cs" />
-    <Compile Include="Services\PlayFabEditorHttpService.cs" />
-    <Compile Include="Services\PlayFabEditorPrefsSO.cs" />
-    <Compile Include="Services\PlayFabEditorUtil.cs" />
+    <Compile Include="Services\UserAuthenticateApiService.cs" />
+    <Compile Include="Services\UserAuthenticateHttpService.cs" />
+    <Compile Include="Services\UserAuthenticateJsonSerializerStrategyService.cs" />
     <Compile Include="TitleSettingPage.xaml.cs">
       <DependentUpon>TitleSettingPage.xaml</DependentUpon>
     </Compile>

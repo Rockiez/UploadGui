@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,21 @@ namespace UploadGui.ViewModels
 {
     public class UserAuthenticateViewModel : NotificationObject
     {
+        public UserAuthenticateViewModel()
+        {
+            CurrentPage = new LoginPage(this);
+            LoginButtonEnable = true;
+            Username = "renhe@wicresoft.com";
+            Password = "199658Renhe";
+            LoginCommand = new DelegateCommand
+            {
+                ExecuteAction = Login
+            };
+            NextCommand = new DelegateCommand
+            {
+                ExecuteAction = Next
+            };
+        }
 
         #region Content of control
         private Page _currentPage;
@@ -60,31 +76,30 @@ namespace UploadGui.ViewModels
                 NotifyPropertyChanged("Password");
             }
         }
+        private bool _loginButtonEnable;
 
-        private IList<string> _studioComboList;
-        private string _studioSelected;
-
-        public IList<string> StudioComboList
+        public bool LoginButtonEnable
         {
-            get { return _studioComboList; }
+            get { return _loginButtonEnable; }
             set
             {
-                _studioComboList = value;
-                NotifyPropertyChanged("StudioComboList");
+                _loginButtonEnable = value;
+                NotifyPropertyChanged("LoginButtonEnable");
             }
         }
-        public string StudioSelected
+
+        private List<Studio> _studioList;
+        public List<Studio> StudioList
         {
-            get
-            {
-                return _studioSelected;
-            }
+            get { return _studioList; }
             set
             {
-                _studioSelected = value;
-                NotifyPropertyChanged("StudioSelected");
+                _studioList = value;
+                NotifyPropertyChanged("StudioList");
             }
         }
+
+
 
         #endregion
 
@@ -101,110 +116,78 @@ namespace UploadGui.ViewModels
             using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
             {
             }
-
-
-
+            
         }
 
 
+        public bool EmailValidation(string email)
+        {
+            if (email != null && email is string)
+            {
 
+                if (email != String.Empty)
+                {
+                    string emailFormartRegex =
+                        @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|" +
+                        @"(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+
+                    return Regex.IsMatch(email, emailFormartRegex);
+                }
+
+            }
+            return false;
+        }
 
 
         #region helper methods
-        
-        public static bool IsAuthenticated()
-        {
-            return !string.IsNullOrEmpty(PlayFabEditorPrefsSO.Instance.DevAccountToken);
-        }
 
+        private string _devAccountToken;
         public DelegateCommand LoginCommand { get; set; }
 
-        private void Login(object sender)
+        private async void Login(object sender)
         {
-            PlayFabEditorApi.Login(new LoginRequest()
+            if (EmailValidation(Username))
             {
-                DeveloperToolProductName = "PlayFab_EditorExtensions",
-                DeveloperToolProductVersion = "2.53.181001",
-                Email = Username,
-                Password = this.Password
-            }, (result) =>
+                LoginButtonEnable = false;
+                await UserAuthenticateApiService.Login(new LoginRequest()
+                {
+                    DeveloperToolProductName = "PlayFab_EditorExtensions",
+                    DeveloperToolProductVersion = "2.53.181001",
+                    Email = Username,
+                    Password = this.Password
+                }, async (result) =>
+                {
+                    _devAccountToken = result.DeveloperClientToken;
+                    await GetStudiosList();
+                });
+                LoginButtonEnable = true;
+            }
+            else
             {
-                PlayFabEditorPrefsSO.Instance.DevAccountToken = result.DeveloperClientToken;
-                PlayFabEditorPrefsSO.Instance.DevAccountEmail = Username;
-                PlayFabEditorDataService.RefreshStudiosList();
-
-            });
-
-            RefreshTitleData();
+                MessageBox.Show("Input string not match Email Format");
+            }
             CurrentPage = new TitleSettingPage(this);
         }
 
-
-        private  void OnStudioChange(Studio newStudio)
+        public async Task GetStudiosList()
         {
-            var newTitleId = (newStudio.Titles == null || newStudio.Titles.Length == 0) ? "" : newStudio.Titles[0].Id;
-            OnTitleIdChange(newTitleId);
-        }
+            if (string.IsNullOrEmpty(_devAccountToken))
+                return;
 
-        private  void OnTitleChange(Title newTitle)
-        {
-            OnTitleIdChange(newTitle.Id);
-        }
-
-        private void OnTitleIdChange(string newTitleId)
-        {
-            var studio = GetStudioForTitleId(newTitleId);
-            PlayFabEditorPrefsSO.Instance.SelectedStudio = studio.Name;
-            PlayFabEditorDataService.SharedSettings.TitleId = newTitleId;
-#if ENABLE_PLAYFABADMIN_API || ENABLE_PLAYFABSERVER_API || UNITY_EDITOR
-            PlayFabEditorDataService.SharedSettings.DeveloperSecretKey = studio.GetTitleSecretKey(newTitleId);
-#endif
-            PlayFabEditorPrefsSO.Instance.TitleDataCache.Clear();
-        }
-        private Studio GetStudioForTitleId(string titleId)
-        {
-            if (PlayFabEditorPrefsSO.Instance.StudioList == null)
-                return Studio.OVERRIDE;
-            foreach (var eachStudio in PlayFabEditorPrefsSO.Instance.StudioList)
-                if (eachStudio.Titles != null)
-                    foreach (var eachTitle in eachStudio.Titles)
-                        if (eachTitle.Id == titleId)
-                            return eachStudio;
-            return Studio.OVERRIDE;
-        }
-
-        public readonly List<KvpItem> items = new List<KvpItem>();
-
-        public void RefreshTitleData()
-        {
-            Action<GetTitleDataResult> dataRequest = (result) =>
+            if (StudioList != null)
+                StudioList.Clear();
+            await UserAuthenticateApiService.GetStudios(new GetStudiosRequest(), (getStudioResult) =>
             {
-                items.Clear();
-                foreach (var kvp in result.Data)
-                    items.Add(new KvpItem(kvp.Key, kvp.Value));
-
-                PlayFabEditorPrefsSO.Instance.TitleDataCache.Clear();
-                foreach (var pair in result.Data)
-                    PlayFabEditorPrefsSO.Instance.TitleDataCache.Add(pair.Key, pair.Value);
-            };
-
-            PlayFabEditorApi.GetTitleData(dataRequest);
+                if (StudioList == null)
+                    StudioList = new List<Studio>();
+                foreach (var eachStudio in getStudioResult.Studios)
+                    StudioList.Add(eachStudio);
+                StudioList.Add(Studio.OVERRIDE);
+            }, _devAccountToken);
         }
+
 
         #endregion
-        public UserAuthenticateViewModel()
-        {
-            CurrentPage = new LoginPage(this);
-            Username = "renhe@wicresoft.com";
-            Password = "199658Renhe";
-            LoginCommand = new DelegateCommand
-            {
-                ExecuteAction = Login
-            };
-            NextCommand = new DelegateCommand
-            {
-                ExecuteAction = Next
-            };
-        }
+
     }
 }

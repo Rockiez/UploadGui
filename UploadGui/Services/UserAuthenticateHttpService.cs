@@ -12,13 +12,12 @@ using UploadGui.Models;
 
 namespace UploadGui.Services
 {
-    class PlayFabEditorHttpService
+    class UserAuthenticateHttpService
     {
 
         internal static async Task MakeApiCall<TRequestType, TResultType>(string api, string apiEndpoint, TRequestType request, Action<TResultType> resultCallback) where TResultType : class
         {
-            var url = apiEndpoint + api;
-            var req = JsonWrapper.SerializeObject(request, PlayFabEditorUtil.ApiSerializerStrategy);
+            var req = JsonWrapper.SerializeObject(request, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
 
             //Set headers
             var headers = new Dictionary<string, string>
@@ -28,16 +27,6 @@ namespace UploadGui.Services
                 {"X-PlayFabSDK", "PlayFab_EditorExtensions" + "_" + "2.53.181001"}
             };
 
-            if (api.Contains("/Server/") || api.Contains("/Admin/"))
-            {
-                if (PlayFabEditorDataService.ActiveTitle == null || string.IsNullOrEmpty(PlayFabEditorDataService.ActiveTitle.SecretKey))
-                {
-                    PlayFabEditorDataService.RefreshStudiosList();
-                    return;
-                }
-
-                headers.Add("X-SecretKey", PlayFabEditorDataService.ActiveTitle.SecretKey);
-            }
 
             using (var client = new HttpClient())
             {
@@ -45,19 +34,15 @@ namespace UploadGui.Services
                 var result = await client.PostAsync(api, new StringContent(
                     req.Trim(), Encoding.UTF8, "application/json"));
                 string resultContent = await result.Content.ReadAsStringAsync();
-                OnWwwSuccess(api, resultCallback, resultContent);
+                DeserializeResult(api, resultCallback, resultContent);
             }
-
-
-
-
         }
 
 
 
-        private static void OnWwwSuccess<TResultType>(string api, Action<TResultType> resultCallback,string response) where TResultType : class
+        private static void DeserializeResult<TResultType>(string api, Action<TResultType> resultCallback,string response) where TResultType : class
         {
-            var httpResult = JsonWrapper.DeserializeObject<HttpResponseObject>(response, PlayFabEditorUtil.ApiSerializerStrategy);
+            var httpResult = JsonWrapper.DeserializeObject<HttpResponseObject>(response, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
             if (httpResult.code != 200)
             {
                 return;
@@ -67,10 +52,9 @@ namespace UploadGui.Services
                 return;
 
             TResultType result = null;
-            var resultAssigned = false;
 
-            var dataJson = JsonWrapper.SerializeObject(httpResult.data, PlayFabEditorUtil.ApiSerializerStrategy);
-            result = JsonWrapper.DeserializeObject<TResultType>(dataJson, PlayFabEditorUtil.ApiSerializerStrategy);
+            var dataJson = JsonWrapper.SerializeObject(httpResult.data, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
+            result = JsonWrapper.DeserializeObject<TResultType>(dataJson, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
 
             resultCallback(result);
         }

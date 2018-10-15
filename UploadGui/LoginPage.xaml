@@ -16,15 +16,20 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="300" Margin="10">
                 <Label Width="100" Content="Email:" />
-                <TextBox Height="22" AutoWordSelection="True" TextWrapping="Wrap" Width="200"  x:Name="UsernameText"  Text="{Binding  Path=Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <TextBox Height="22" AutoWordSelection="True" TextWrapping="Wrap" Width="200">
+                    <TextBox.Text>
+                        <Binding Path="Username" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay"/>
+                    </TextBox.Text>
+                </TextBox>
+
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"  Width="300" Margin="10" >
                 <Label Width="100" Content="Password:" />
-                <TextBox Height="22" TextWrapping="Wrap"  Width="200" x:Name="PasswordText" Text="{Binding  Path=Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <TextBox Height="22" TextWrapping="Wrap"  Width="200" Text="{Binding  Path=Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </StackPanel>
 
-            <Button Content="Login" Height="25" Width="100" Margin="10" Command="{Binding LoginCommand}" >
+            <Button Content="Login" Height="25" Width="100" Margin="10" Command="{Binding LoginCommand}" IsEnabled="{Binding LoginButtonEnable}" >
     
             </Button>
 

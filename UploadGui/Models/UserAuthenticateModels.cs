@@ -86,35 +86,4 @@ namespace UploadGui.Models
         public object data;
     }
 
-
-    public class KvpItem
-    {
-        public string Key;
-        public string Value;
-        public string _prvKey;
-        public string _prvValue;
-        public bool isDirty;
-
-        public KvpItem(string k, string v)
-        {
-            Key = k;
-            Value = v;
-
-            _prvKey = k;
-            _prvValue = v;
-        }
-
-        public void CleanItem()
-        {
-            _prvKey = Key;
-            _prvValue = Value;
-            isDirty = false;
-        }
-
-        public void DataEditedCheck()
-        {
-            if (Key != _prvKey || Value != _prvValue)
-                isDirty = true;
-        }
-    }
 }
