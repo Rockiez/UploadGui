@@ -8,7 +8,7 @@ using PlayFab.Json;
 
 namespace UploadGui.Services
 {
-    internal static class PlayFabEditorUtil
+    internal static class UserAuthenticateJsonSerializerStrategyService
     {
         public static readonly string[] _defaultDateTimeFormats = new string[]{ // All parseable ISO 8601 formats for DateTime.[Try]ParseExact - Lets us deserialize any legacy timestamps in one of these formats
             // These are the standard format with ISO 8601 UTC markers (T/Z)
@@ -41,9 +41,7 @@ namespace UploadGui.Services
         public static MyJsonSerializerStrategy ApiSerializerStrategy = new MyJsonSerializerStrategy();
         public class MyJsonSerializerStrategy : PocoJsonSerializerStrategy
         {
-            /// <summary>
-            /// Convert the json value into the destination field/property
-            /// </summary>
+
             public override object DeserializeObject(object value, Type type)
             {
                 string valueStr = value as string;
