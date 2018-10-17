@@ -23,7 +23,6 @@ namespace UploadGui.ViewModels
             CurrentPage = new LoginPage(this);
             LoginButtonEnable = true;
             NextButtonEnable = false;
-            EmailList = new List<string>();
 
             using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
             {
@@ -32,9 +31,6 @@ namespace UploadGui.ViewModels
                 SqlDataReader reader = queryCommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    EmailList.Add(
-                        reader["Email"].ToString()
-                    );
                     UserList.Add(new User()
                     {
                         email = reader["Email"].ToString(),
@@ -43,8 +39,6 @@ namespace UploadGui.ViewModels
                 }
                 reader.Close();
             }
-
-
             //command binding
 
             LoginCommand = new DelegateCommand
@@ -192,16 +186,6 @@ namespace UploadGui.ViewModels
             {
                 _nextButtonEnable = value;
                 NotifyPropertyChanged(nameof(NextButtonEnable));
-            }
-        }
-        private List<string> _emailList;
-        public List<string> EmailList
-        {
-            get { return _emailList; }
-            set
-            {
-                _emailList = value;
-                NotifyPropertyChanged(nameof(EmailList));
             }
         }
         private List<User> _userList = new List<User>();
