@@ -197,7 +197,11 @@ namespace UploadGui.Services
         public async Task<bool> UploadStatisticDefinitions()
         {
             if (string.IsNullOrEmpty(statsDefPath))
-                return false;
+            {
+                LogToFile("Player Statistics Definitions File Path is Null ");
+                return true;
+            }
+                
 
             LogToFile("Updating Player Statistics Definitions ...");
             var parsedFile = ParseFile(statsDefPath);
@@ -260,8 +264,13 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadTitleNews()
         {
+
             if (string.IsNullOrEmpty(titleNewsPath))
-                return false;
+            {
+                LogToFile("TitleNews File Path is Null ");
+                return true;
+            }
+
 
             LogToFile("Uploading TitleNews...");
             var parsedFile = ParseFile(titleNewsPath);
@@ -292,8 +301,12 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadCloudScript()
         {
+
             if (string.IsNullOrEmpty(cloudScriptPath))
-                return false;
+            {
+                LogToFile("CloudScript File Path is Null ");
+                return true;
+            }
 
             LogToFile("Uploading CloudScript...");
             var parsedFile = ParseFile(cloudScriptPath);
@@ -335,10 +348,16 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadTitleData()
         {
+
+
             if (string.IsNullOrEmpty(titleDataPath))
-                return false;
+            {
+                LogToFile("Title Data Keys & Values File Path is Null ");
+                return true;
+            }
 
             LogToFile("Uploading Title Data Keys & Values...");
+
             var parsedFile = ParseFile(titleDataPath);
             var titleDataDict = JsonWrapper.DeserializeObject<Dictionary<string, string>>(parsedFile);
 
@@ -369,6 +388,11 @@ namespace UploadGui.Services
         public async Task<bool> UploadVc()
         {
             LogToFile("Uploading Virtual Currency Settings...");
+            if (string.IsNullOrEmpty(currencyPath))
+            {
+                LogToFile("irtual Currency Settings File Path is Null ");
+                return true;
+            }
             var parsedFile = ParseFile(currencyPath);
             var vcData = JsonWrapper.DeserializeObject<List<VirtualCurrencyData>>(parsedFile);
             var request = new AddVirtualCurrencyTypesRequest
@@ -392,8 +416,14 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadCatalog(List<CatalogItem> reUploadList)
         {
+
+
+
             if (string.IsNullOrEmpty(catalogPath))
-                return false;
+            {
+                LogToFile("CatalogItems File Path is Null ");
+                return true;
+            }
 
             LogToFile("Uploading CatalogItems...");
             var parsedFile = ParseFile(catalogPath);
@@ -423,8 +453,12 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadDropTables()
         {
+
             if (string.IsNullOrEmpty(dropTablesPath))
-                return false;
+            {
+                LogToFile("DropTables File Path is Null ");
+                return true;
+            }
 
             LogToFile("Uploading DropTables...");
             var parsedFile = ParseFile(dropTablesPath);
@@ -468,8 +502,14 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadStores()
         {
+
+
+
             if (string.IsNullOrEmpty(storesPath))
-                return false;
+            {
+                LogToFile("Stores File Path is Null ");
+                return true;
+            }
 
             LogToFile("Uploading Stores...");
             var parsedFile = ParseFile(storesPath);
@@ -503,8 +543,14 @@ namespace UploadGui.Services
 
         public async Task<bool> UploadCdnAssets()
         {
+
+
             if (string.IsNullOrEmpty(cdnAssetsPath))
-                return false;
+            {
+                LogToFile("CDN AssetBundles File Path is Null ");
+                return true;
+            }
+
 
             LogToFile("Uploading CDN AssetBundles...");
             var parsedFile = ParseFile(cdnAssetsPath);

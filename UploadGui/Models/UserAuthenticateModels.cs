@@ -93,5 +93,14 @@ namespace UploadGui.Models
         public string status;
         public object data;
     }
+    public class User
+    {
+        public string email;
+        public string password;
+        public override string ToString()
+        {
+            return email;
+        }
+    }
 
 }

@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="PlayFabAllSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PlayFabAllSDK.1.38.181001\lib\portable45-net45+win8+wpa81\PlayFabAllSDK.dll</HintPath>
     </Reference>
@@ -62,6 +59,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfControls, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfControls.AutoCompleteTextBox.1.0.0.7\lib\net35\WpfControls.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -69,6 +69,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Utils\DropdownItem.cs" />
+    <Compile Include="Utils\DropdownTextBox.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -87,6 +89,10 @@
       <DependentUpon>UpLoadWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\UserAuthenticateViewModel.cs" />
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

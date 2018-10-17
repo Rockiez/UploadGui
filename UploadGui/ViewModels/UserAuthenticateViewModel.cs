@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using UploadGui.Commands;
-using Dapper;
 using UploadGui.Models;
 using UploadGui.Services;
 
@@ -18,13 +17,39 @@ namespace UploadGui.ViewModels
 {
     public class UserAuthenticateViewModel : NotificationObject
     {
+
         public UserAuthenticateViewModel()
         {
             CurrentPage = new LoginPage(this);
             LoginButtonEnable = true;
             NextButtonEnable = false;
-            Username = "renhe@wicresoft.com";
-            Password = "199658Renhe";
+            EmailList = new List<string>();
+
+            using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
+            {
+                SqlCommand queryCommand = new SqlCommand($"select * from EmailTable ", connection);
+                queryCommand.Connection.Open();
+                SqlDataReader reader = queryCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader["Email"].ToString());
+                    EmailList.Add(
+                        reader["Email"].ToString()
+                    );
+                    UserList.Add(new User()
+                    {
+                        email = reader["Email"].ToString(),
+                        password = reader["Password"].ToString()
+                    });
+                }
+                reader.Close();
+               
+
+            }
+
+
+            //command binding
+
             LoginCommand = new DelegateCommand
             {
                 ExecuteAction = Login
@@ -60,6 +85,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _username = value;
+                
                 NotifyPropertyChanged("Username");
             }
         }
@@ -169,7 +195,26 @@ namespace UploadGui.ViewModels
                 NotifyPropertyChanged("NextButtonEnable");
             }
         }
-
+        private List<string> _emailList;
+        public List<string> EmailList
+        {
+            get { return _emailList; }
+            set
+            {
+                _emailList = value;
+                NotifyPropertyChanged("EmailList");
+            }
+        }
+        private List<User> _userList = new List<User>();
+        public List<User> UserList
+        {
+            get { return _userList; }
+            set
+            {
+                _userList = value;
+                NotifyPropertyChanged("UserList");
+            }
+        }
         #endregion
 
 
@@ -209,26 +254,16 @@ namespace UploadGui.ViewModels
                 LoginButtonEnable = true;
                 using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
                 {
-                    var insertFlag = true;
-                    SqlCommand queryCommand = new SqlCommand($"select Email from EmailTable ", connection);
-                    queryCommand.Connection.Open();
-                    SqlDataReader reader = queryCommand.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        Console.WriteLine(reader["Email"].ToString());
-                        if (reader["Email"].ToString() == Username)
-                        {
-                            insertFlag = false;
-                        }
-                    }
-                    reader.Close();
                     
-                    if (insertFlag)
+                    if (!UserList
+                        .Where(user => { return user.email == Username; })
+                        .Any())
                     {
-                        SqlCommand insertCommand = new SqlCommand($"INSERT INTO EmailTable(Email) VALUES('{Username}')", connection);
+                        SqlCommand insertCommand = new SqlCommand($"INSERT INTO EmailTable(Email,Password) VALUES('{Username},{Password}')", connection);
+                        insertCommand.Connection.Open();
+                        
                         insertCommand.ExecuteNonQuery();
                     }
-
                 }
             }
             else
