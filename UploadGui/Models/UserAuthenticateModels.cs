@@ -76,16 +76,6 @@ namespace UploadGui.Models
         }
     }
 
-    public class GetTitleDataRequest
-    {
-        public List<string> Keys;
-    }
-
-    public class GetTitleDataResult
-    {
-        public Dictionary<string, string> Data;
-    }
-
 
     public class HttpResponseObject
     {

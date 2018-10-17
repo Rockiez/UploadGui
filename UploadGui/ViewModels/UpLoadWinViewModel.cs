@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using PlayFab.UUnit;
+using System.Windows.Controls;
 using UploadGui.Commands;
 using UploadGui.Models;
 using UploadGui.Services;
@@ -15,7 +15,7 @@ namespace UploadGui.ViewModels
 
         #region Path of folder or file
         private string _folderPath;
-        public string folderPath
+        public string FolderPath
         {
             get
             {
@@ -24,12 +24,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _folderPath = value;
-                NotifyPropertyChanged("folderPath");
+                NotifyPropertyChanged(nameof(FolderPath));
             }
         }
 
         private string _currencyPath;
-        public string currencyPath
+        public string CurrencyPath
         {
             get
             {
@@ -38,12 +38,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _currencyPath = value;
-                NotifyPropertyChanged("currencyPath");
+                NotifyPropertyChanged(nameof(CurrencyPath));
             }
         }
 
         private string _titleSettingsPath;
-        public string titleSettingsPath
+        public string TitleSettingsPath
         {
             get
             {
@@ -52,12 +52,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _titleSettingsPath = value;
-                NotifyPropertyChanged("titleSettingsPath");
+                NotifyPropertyChanged(nameof(TitleSettingsPath));
             }
         }
 
         private string _titleDataPath;
-        public string titleDataPath
+        public string TitleDataPath
         {
             get
             {
@@ -66,12 +66,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _titleDataPath = value;
-                NotifyPropertyChanged("titleDataPath");
+                NotifyPropertyChanged(nameof(TitleDataPath));
             }
         }
 
         private string _catalogPath;
-        public string catalogPath
+        public string CatalogPath
         {
             get
             {
@@ -80,12 +80,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _catalogPath = value;
-                NotifyPropertyChanged("catalogPath");
+                NotifyPropertyChanged(nameof(CatalogPath));
             }
         }
 
         private string _dropTablesPath;
-        public string dropTablesPath
+        public string DropTablesPath
         {
             get
             {
@@ -94,12 +94,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _dropTablesPath = value;
-                NotifyPropertyChanged("dropTablesPath");
+                NotifyPropertyChanged(nameof(DropTablesPath));
             }
         }
 
         private string _cloudScriptPath;
-        public string cloudScriptPath
+        public string CloudScriptPath
         {
             get
             {
@@ -108,12 +108,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _cloudScriptPath = value;
-                NotifyPropertyChanged("cloudScriptPath");
+                NotifyPropertyChanged(nameof(CloudScriptPath));
             }
         }
 
         private string _titleNewsPath;
-        public string titleNewsPath
+        public string TitleNewsPath
         {
             get
             {
@@ -122,12 +122,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _titleNewsPath = value;
-                NotifyPropertyChanged("titleNewsPath");
+                NotifyPropertyChanged(nameof(TitleNewsPath));
             }
         }
 
         private string _statsDefPath;
-        public string statsDefPath
+        public string StatsDefPath
         {
             get
             {
@@ -136,12 +136,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _statsDefPath = value;
-                NotifyPropertyChanged("statsDefPath");
+                NotifyPropertyChanged(nameof(StatsDefPath));
             }
         }
 
         private string _storesPath;
-        public string storesPath
+        public string StoresPath
         {
             get
             {
@@ -150,12 +150,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _storesPath = value;
-                NotifyPropertyChanged("storesPath");
+                NotifyPropertyChanged(nameof(StoresPath));
             }
         }
 
         private string _cdnAssetsPath;
-        public string cdnAssetsPath
+        public string CdnAssetsPath
         {
             get
             {
@@ -164,7 +164,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _cdnAssetsPath = value;
-                NotifyPropertyChanged("cdnAssetsPath");
+                NotifyPropertyChanged(nameof(CdnAssetsPath));
             }
         }
 
@@ -172,7 +172,7 @@ namespace UploadGui.ViewModels
 
         #region Content of contorl
         private string _consoleTBContent;
-        public string consoleTBContent
+        public string ConsoleTbContent
         {
             get
             {
@@ -181,12 +181,12 @@ namespace UploadGui.ViewModels
             set
             {
                 _consoleTBContent = value;
-                NotifyPropertyChanged("consoleTBContent");
+                NotifyPropertyChanged(nameof(ConsoleTbContent));
             }
         }
 
         private int _progressBarValue;
-        public int progressBarValue
+        public int ProgressBarValue
         {
             get
             {
@@ -195,11 +195,11 @@ namespace UploadGui.ViewModels
             set
             {
                 _progressBarValue = value;
-                NotifyPropertyChanged("progressBarValue");
+                NotifyPropertyChanged(nameof(ProgressBarValue));
             }
         }
         private bool _uploadButtonEnable;
-        public bool uploadButtonEnable
+        public bool UploadButtonEnable
         {
             get
             {
@@ -208,11 +208,11 @@ namespace UploadGui.ViewModels
             set
             {
                 _uploadButtonEnable = value;
-                NotifyPropertyChanged("uploadButtonEnable");
+                NotifyPropertyChanged(nameof(UploadButtonEnable));
             }
         }
         private bool _stopUploadButtonEnable;
-        public bool stopUploadButtonEnable
+        public bool StopUploadButtonEnable
         {
             get
             {
@@ -221,7 +221,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _stopUploadButtonEnable = value;
-                NotifyPropertyChanged("stopUploadButtonEnable");
+                NotifyPropertyChanged(nameof(StopUploadButtonEnable));
             }
         }
 
@@ -255,19 +255,19 @@ namespace UploadGui.ViewModels
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                folderPath = openFileDialog.SelectedPath;
+                FolderPath = openFileDialog.SelectedPath;
                 Directory.SetCurrentDirectory(openFileDialog.SelectedPath);
 
-                currencyPath = Check_File_Basis_FolderPath(folderPath, CurrencyFolderPath);
-                titleSettingsPath = Check_File_Basis_FolderPath(folderPath, TitleSettingsFolderPath);
-                titleDataPath = Check_File_Basis_FolderPath(folderPath, TitleDataFolderPath);
-                catalogPath = Check_File_Basis_FolderPath(folderPath, CatalogFolderPath);
-                dropTablesPath = Check_File_Basis_FolderPath(folderPath, DropTablesFolderPath);
-                cloudScriptPath = Check_File_Basis_FolderPath(folderPath, CloudScriptFolderPath);
-                titleNewsPath = Check_File_Basis_FolderPath(folderPath, TitleNewsFolderPath);
-                statsDefPath = Check_File_Basis_FolderPath(folderPath, StatsDefFolderPath);
-                storesPath = Check_File_Basis_FolderPath(folderPath, StoresFolderPath);
-                cdnAssetsPath = Check_File_Basis_FolderPath(folderPath, CdnAssetsFolderPath);
+                CurrencyPath = Check_File_Basis_FolderPath(FolderPath, CurrencyFolderPath);
+                TitleSettingsPath = Check_File_Basis_FolderPath(FolderPath, TitleSettingsFolderPath);
+                TitleDataPath = Check_File_Basis_FolderPath(FolderPath, TitleDataFolderPath);
+                CatalogPath = Check_File_Basis_FolderPath(FolderPath, CatalogFolderPath);
+                DropTablesPath = Check_File_Basis_FolderPath(FolderPath, DropTablesFolderPath);
+                CloudScriptPath = Check_File_Basis_FolderPath(FolderPath, CloudScriptFolderPath);
+                TitleNewsPath = Check_File_Basis_FolderPath(FolderPath, TitleNewsFolderPath);
+                StatsDefPath = Check_File_Basis_FolderPath(FolderPath, StatsDefFolderPath);
+                StoresPath = Check_File_Basis_FolderPath(FolderPath, StoresFolderPath);
+                CdnAssetsPath = Check_File_Basis_FolderPath(FolderPath, CdnAssetsFolderPath);
 
             }
         }
@@ -283,14 +283,14 @@ namespace UploadGui.ViewModels
             return "";
         }
 
-        #region Select file Functions 
+        
 
         private string Open_Local_Json()
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog() { Filter = "(*.json)|*.json" };
-            if (folderPath != "")
+            if (FolderPath != "")
             {
-                openFileDialog.InitialDirectory = folderPath;
+                openFileDialog.InitialDirectory = FolderPath;
             }
             if (openFileDialog.ShowDialog() == true)
             {
@@ -298,102 +298,116 @@ namespace UploadGui.ViewModels
             }
             return "";
         }
+        #region Select file Functions 
+        //public DelegateCommand CurrencySelectCommand { get; set; }
+        //private void Currency_Select(object sender) => currencyPath = Open_Local_Json();
 
-        public DelegateCommand CurrencySelectCommand { get; set; }
-        private void Currency_Select(object sender) => currencyPath = Open_Local_Json();
+        //public DelegateCommand CatalogSelectCommand { get; set; }
+        //private void Catalog_Select(object sender) => catalogPath = Open_Local_Json();
 
-        public DelegateCommand CatalogSelectCommand { get; set; }
-        private void Catalog_Select(object sender) => catalogPath = Open_Local_Json();
+        //public DelegateCommand TitleDataSelectCommand { get; set; }
+        //private void Title_Data_Select(object sender) => titleDataPath = Open_Local_Json();
 
-        public DelegateCommand TitleDataSelectCommand { get; set; }
-        private void Title_Data_Select(object sender) => titleDataPath = Open_Local_Json();
+        //public DelegateCommand DropTablesCommand { get; set; }
+        //private void Drop_Tables_Select(object sender) => dropTablesPath = Open_Local_Json();
 
-        public DelegateCommand DropTablesCommand { get; set; }
-        private void Drop_Tables_Select(object sender) => dropTablesPath = Open_Local_Json();
+        //public DelegateCommand CloudScriptSelectCommand { get; set; }
+        //private void Cloud_Script_Select(object sender) => cloudScriptPath = Open_Local_Json();
 
-        public DelegateCommand CloudScriptSelectCommand { get; set; }
-        private void Cloud_Script_Select(object sender) => cloudScriptPath = Open_Local_Json();
+        //public DelegateCommand TitleNewsSelectCommand { get; set; }
+        //private void Title_News_Select(object sender) => titleNewsPath = Open_Local_Json();
 
-        public DelegateCommand TitleNewsSelectCommand { get; set; }
-        private void Title_News_Select(object sender) => titleNewsPath = Open_Local_Json();
+        //public DelegateCommand StatisticsDefinitionsSelectCommand { get; set; }
+        //private void Statistics_Definitions_Select(object sender) => statsDefPath = Open_Local_Json();
 
-        public DelegateCommand StatisticsDefinitionsSelectCommand { get; set; }
-        private void Statistics_Definitions_Select(object sender) => statsDefPath = Open_Local_Json();
-
-        public DelegateCommand StoresSelectCommand { get; set; }
-        private void Stores_Select(object sender) => storesPath = Open_Local_Json();
-
-        public DelegateCommand CdnAssetsSelectCommand { get; set; }
-        private void CDN_Assets_Select(object sender) => cdnAssetsPath = Open_Local_Json();
+        //public DelegateCommand StoresSelectCommand { get; set; }
+        //private void Stores_Select(object sender) => storesPath = Open_Local_Json();
+        //public DelegateCommand CdnAssetsSelectCommand { get; set; }
+        //private void CDN_Assets_Select(object sender) => cdnAssetsPath = Open_Local_Json();
 
         #endregion
+
+        // No MVVM but Encapsulation
+        public DelegateCommand JsonSelectCommand { get; set; }
+        private void Json_Select(object sender)
+        {
+            var tb = sender as TextBox;
+            tb.Text = Open_Local_Json();
+        }
 
 
         #region Clean file Functions
 
-        public DelegateCommand CurrencyClearCommand { get; set; }
-        private void Currency_Clear(object sender)
-        {
-            currencyPath = "";
-        }
+        //public DelegateCommand CurrencyClearCommand { get; set; }
+        //private void Currency_Clear(object sender)
+        //{
+        //    currencyPath = "";
+        //}
 
-        public DelegateCommand CatalogClearCommand { get; set; }
-        private void Catalog_Clear(object sender)
-        {
-            catalogPath = "";
+        //public DelegateCommand CatalogClearCommand { get; set; }
+        //private void Catalog_Clear(object sender)
+        //{
+        //    catalogPath = "";
 
-        }
+        //}
 
-        public DelegateCommand TitleDataClearCommand { get; set; }
-        private void Title_Data_Clear(object sender)
-        {
-            titleDataPath = "";
+        //public DelegateCommand TitleDataClearCommand { get; set; }
+        //private void Title_Data_Clear(object sender)
+        //{
+        //    titleDataPath = "";
 
-        }
+        //}
 
-        public DelegateCommand DropTablesClearCommand { get; set; }
-        private void Drop_Tables_Clear(object sender)
-        {
-            dropTablesPath = "";
+        //public DelegateCommand DropTablesClearCommand { get; set; }
+        //private void Drop_Tables_Clear(object sender)
+        //{
+        //    dropTablesPath = "";
 
-        }
+        //}
 
-        public DelegateCommand CloudScriptClearCommand { get; set; }
-        private void Cloud_Script_Clear(object sender)
-        {
-            cloudScriptPath = "";
+        //public DelegateCommand CloudScriptClearCommand { get; set; }
+        //private void Cloud_Script_Clear(object sender)
+        //{
+        //    cloudScriptPath = "";
 
-        }
+        //}
 
-        public DelegateCommand TitleNewsCleanCommand { get; set; }
-        private void Title_News_Clean(object sender)
-        {
-            titleNewsPath = "";
+        //public DelegateCommand TitleNewsCleanCommand { get; set; }
+        //private void Title_News_Clean(object sender)
+        //{
+        //    titleNewsPath = "";
 
-        }
+        //}
 
-        public DelegateCommand StatisticsDefinitionsCleanCommand { get; set; }
-        private void Statistics_Definitions_Clean(object sender)
-        {
-            statsDefPath = "";
+        //public DelegateCommand StatisticsDefinitionsCleanCommand { get; set; }
+        //private void Statistics_Definitions_Clean(object sender)
+        //{
+        //    statsDefPath = "";
 
-        }
+        //}
 
-        public DelegateCommand StoresCleanCommand { get; set; }
-        private void Stores_Clean(object sender)
-        {
-            storesPath = "";
+        //public DelegateCommand StoresCleanCommand { get; set; }
+        //private void Stores_Clean(object sender)
+        //{
+        //    storesPath = "";
 
-        }
+        //}
 
-        public DelegateCommand CdnAssetsCleanCommand { get; set; }
-        private void CDN_Assets_clean(object sender)
-        {
-            cdnAssetsPath = "";
+        //public DelegateCommand CdnAssetsCleanCommand { get; set; }
+        //private void CDN_Assets_clean(object sender)
+        //{
+        //    cdnAssetsPath = "";
 
-        }
-
+        //}
         #endregion
+
+        // No MVVM but Encapsulation
+        public DelegateCommand CleanCommand { get; set; }
+        private void Json_Clean(object sender)
+        {
+            var tb = sender as TextBox;
+            tb.Text = "";
+        }
 
 
         //Upload Json file with async
@@ -402,16 +416,16 @@ namespace UploadGui.ViewModels
         public  DelegateCommand UploadCommand { get; set; }
         private async void Upload(object sender)
         {
-            stopUploadButtonEnable = true;
-            uploadButtonEnable = false;
+            StopUploadButtonEnable = true;
+            UploadButtonEnable = false;
 
             _upload = new UploadService(this);
             _cancelUploadTokenSource = new CancellationTokenSource();
 
             await _upload.UploadAllJson(_cancelUploadTokenSource.Token);
 
-            uploadButtonEnable = true;
-            stopUploadButtonEnable = false;
+            UploadButtonEnable = true;
+            StopUploadButtonEnable = false;
         }
 
 
@@ -420,18 +434,15 @@ namespace UploadGui.ViewModels
         public DelegateCommand StopCommand { get; set; }
         private void Stop(object sender)
         {
-            consoleTBContent = "\n Now cancelling all tasks \n" + consoleTBContent;
+            ConsoleTbContent = "\n Now cancelling all tasks \n" + ConsoleTbContent;
             _cancelUploadTokenSource.Cancel();
         }
 
         private bool CanUpload(object sender)
         {
-            return uploadButtonEnable == true ? true : false;
+            return UploadButtonEnable == true ? true : false;
         }
-        private bool CanStop(object sender)
-        {
-            return stopUploadButtonEnable == true ? true : false;
-        }
+
 
 
         public Title sTitle;
@@ -441,105 +452,110 @@ namespace UploadGui.ViewModels
 
         public UpLoadWinViewModel(Title sTitle)
         {
-            uploadButtonEnable = true;
-            stopUploadButtonEnable = false;
+            UploadButtonEnable = true;
+            StopUploadButtonEnable = false;
             this.sTitle = sTitle;
-            //Select Command Binding
             AssetFolderSelectCommand = new DelegateCommand
             {
                 ExecuteAction = AssetFolder_Select
             };
 
-            CurrencySelectCommand = new DelegateCommand
+            //Select Command Binding
+
+            //CurrencySelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Currency_Select
+            //};
+
+            //CatalogSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Catalog_Select
+            //};
+
+            //TitleDataSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Title_Data_Select
+            //};
+
+            //DropTablesCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Drop_Tables_Select
+            //};
+
+            //CloudScriptSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Cloud_Script_Select
+            //};
+
+            //TitleNewsSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Title_News_Select
+            //};
+
+            //StatisticsDefinitionsSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Statistics_Definitions_Select
+            //};
+
+            //StoresSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Stores_Select
+            //};
+
+            //CdnAssetsSelectCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = CDN_Assets_Select
+            //};
+
+            JsonSelectCommand = new DelegateCommand
             {
-                ExecuteAction = Currency_Select
+                ExecuteAction = Json_Select
             };
 
-            CatalogSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Catalog_Select
-            };
-
-            TitleDataSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Title_Data_Select
-            };
-
-            DropTablesCommand = new DelegateCommand
-            {
-                ExecuteAction = Drop_Tables_Select
-            };
-
-            CloudScriptSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Cloud_Script_Select
-            };
-
-            TitleNewsSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Title_News_Select
-            };
-
-            StatisticsDefinitionsSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Statistics_Definitions_Select
-            };
-
-            StoresSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = Stores_Select
-            };
-
-            CdnAssetsSelectCommand = new DelegateCommand
-            {
-                ExecuteAction = CDN_Assets_Select
-            };
 
 
+            ////Clean Command Binding
+            //CurrencyClearCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Currency_Clear
+            //};
 
+            //CatalogClearCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Catalog_Clear
+            //};
 
-            //Clean Command Binding
-            CurrencyClearCommand = new DelegateCommand
-            {
-                ExecuteAction = Currency_Clear
-            };
+            //TitleDataClearCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Title_Data_Clear
+            //};
 
-            CatalogClearCommand = new DelegateCommand
-            {
-                ExecuteAction = Catalog_Clear
-            };
+            //DropTablesClearCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Drop_Tables_Clear
+            //};
 
-            TitleDataClearCommand = new DelegateCommand
-            {
-                ExecuteAction = Title_Data_Clear
-            };
+            //CloudScriptClearCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Cloud_Script_Clear
+            //};
 
-            DropTablesClearCommand = new DelegateCommand
-            {
-                ExecuteAction = Drop_Tables_Clear
-            };
-
-            CloudScriptClearCommand = new DelegateCommand
-            {
-                ExecuteAction = Cloud_Script_Clear
-            };
-
-            TitleNewsCleanCommand = new DelegateCommand
-            {
-                ExecuteAction = Title_News_Clean
-            };
-            StatisticsDefinitionsCleanCommand = new DelegateCommand
-            {
-                ExecuteAction = Statistics_Definitions_Clean
-            };
-            StoresCleanCommand = new DelegateCommand
-            {
-                ExecuteAction = Stores_Clean
-            };
-            CdnAssetsCleanCommand = new DelegateCommand
-            {
-                ExecuteAction = CDN_Assets_clean
-            };
+            //TitleNewsCleanCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Title_News_Clean
+            //};
+            //StatisticsDefinitionsCleanCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Statistics_Definitions_Clean
+            //};
+            //StoresCleanCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = Stores_Clean
+            //};
+            //CdnAssetsCleanCommand = new DelegateCommand
+            //{
+            //    ExecuteAction = CDN_Assets_clean
+            //};
 
             UploadCommand = new DelegateCommand
             {
@@ -550,7 +566,11 @@ namespace UploadGui.ViewModels
             StopCommand = new DelegateCommand
             {
                 ExecuteAction = Stop,
-                //CanExecutePre = CanStop
+
+            };
+            CleanCommand = new DelegateCommand
+            {
+                ExecuteAction = Json_Clean,
 
             };
         }

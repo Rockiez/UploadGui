@@ -59,9 +59,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WpfControls, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfControls.AutoCompleteTextBox.1.0.0.7\lib\net35\WpfControls.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -77,7 +74,6 @@
     <Compile Include="Models\UserAuthenticateModels.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\UserAuthenticateApiService.cs" />
-    <Compile Include="Services\UserAuthenticateHttpService.cs" />
     <Compile Include="Services\UserAuthenticateJsonSerializerStrategyService.cs" />
     <Compile Include="TitleSettingPage.xaml.cs">
       <DependentUpon>TitleSettingPage.xaml</DependentUpon>

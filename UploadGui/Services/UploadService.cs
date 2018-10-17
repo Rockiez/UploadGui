@@ -42,15 +42,15 @@ namespace UploadGui.Services
         {
             this.upLoadWinViewModel = upLoadWinViewModel;
 
-            currencyPath = upLoadWinViewModel.currencyPath;
-            catalogPath = upLoadWinViewModel.catalogPath;
-            titleDataPath = upLoadWinViewModel.titleDataPath;
-            dropTablesPath = upLoadWinViewModel.dropTablesPath;
-            cloudScriptPath = upLoadWinViewModel.cloudScriptPath;
-            titleNewsPath = upLoadWinViewModel.titleNewsPath;
-            statsDefPath = upLoadWinViewModel.statsDefPath;
-            storesPath = upLoadWinViewModel.storesPath;
-            cdnAssetsPath = upLoadWinViewModel.cdnAssetsPath;
+            currencyPath = upLoadWinViewModel.CurrencyPath;
+            catalogPath = upLoadWinViewModel.CatalogPath;
+            titleDataPath = upLoadWinViewModel.TitleDataPath;
+            dropTablesPath = upLoadWinViewModel.DropTablesPath;
+            cloudScriptPath = upLoadWinViewModel.CloudScriptPath;
+            titleNewsPath = upLoadWinViewModel.TitleNewsPath;
+            statsDefPath = upLoadWinViewModel.StatsDefPath;
+            storesPath = upLoadWinViewModel.StoresPath;
+            cdnAssetsPath = upLoadWinViewModel.CdnAssetsPath;
 
         }
 
@@ -78,32 +78,32 @@ namespace UploadGui.Services
 
                 // start uploading
                 if (token.IsCancellationRequested)  return;
-                upLoadWinViewModel.progressBarValue += !await UploadTitleData()
+                upLoadWinViewModel.ProgressBarValue += !await UploadTitleData()
                     ? throw new Exception("\tFailed to upload TitleData.")
                     : 10;
                 if (token.IsCancellationRequested) return;
 
-                upLoadWinViewModel.progressBarValue += !await UploadEconomyData()
+                upLoadWinViewModel.ProgressBarValue += !await UploadEconomyData()
                     ? throw new Exception("\tFailed to upload Economy Data.")
                     : 20;
                 if (token.IsCancellationRequested) return;
 
-                upLoadWinViewModel.progressBarValue += !await UploadCloudScript()
+                upLoadWinViewModel.ProgressBarValue += !await UploadCloudScript()
                     ? throw new Exception("\tFailed to upload CloudScript.")
                     : 20;
                 if (token.IsCancellationRequested) return;
 
-                upLoadWinViewModel.progressBarValue += !await UploadTitleNews()
+                upLoadWinViewModel.ProgressBarValue += !await UploadTitleNews()
                     ? throw new Exception("\tFailed to upload TitleNews.")
                     : 20;
                 if (token.IsCancellationRequested) return;
 
-                upLoadWinViewModel.progressBarValue += !await UploadStatisticDefinitions()
+                upLoadWinViewModel.ProgressBarValue += !await UploadStatisticDefinitions()
                     ? throw new Exception("\tFailed to upload Statistics Definitions.")
                     : 20;
                 if (token.IsCancellationRequested) return;
 
-                upLoadWinViewModel.progressBarValue += !await UploadCdnAssets()
+                upLoadWinViewModel.ProgressBarValue += !await UploadCdnAssets()
                     ? throw new Exception("\tFailed to upload CDN Assets.")
                     : 10;
             }
@@ -585,7 +585,7 @@ namespace UploadGui.Services
 
         void LogToFile(string content, ConsoleColor color = ConsoleColor.White)
         {
-            upLoadWinViewModel.consoleTBContent = content + "\n"+ upLoadWinViewModel.consoleTBContent ;
+            upLoadWinViewModel.ConsoleTbContent = content + "\n"+ upLoadWinViewModel.ConsoleTbContent ;
             Console.ForegroundColor = color;
             Console.WriteLine(content);
             logStream.WriteLine(content);

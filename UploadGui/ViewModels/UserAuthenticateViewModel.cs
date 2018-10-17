@@ -32,7 +32,6 @@ namespace UploadGui.ViewModels
                 SqlDataReader reader = queryCommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    Console.WriteLine(reader["Email"].ToString());
                     EmailList.Add(
                         reader["Email"].ToString()
                     );
@@ -43,8 +42,6 @@ namespace UploadGui.ViewModels
                     });
                 }
                 reader.Close();
-               
-
             }
 
 
@@ -59,6 +56,8 @@ namespace UploadGui.ViewModels
                 ExecuteAction = Next
             };
         }
+
+        private string _devAccountToken;
 
         #region data binding
         private Page _currentPage;
@@ -86,7 +85,7 @@ namespace UploadGui.ViewModels
             {
                 _username = value;
                 
-                NotifyPropertyChanged("Username");
+                NotifyPropertyChanged(nameof(Username));
             }
         }
 
@@ -100,7 +99,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _password = value;
-                NotifyPropertyChanged("Password");
+                NotifyPropertyChanged(nameof(Password));
             }
         }
         private bool _loginButtonEnable;
@@ -111,7 +110,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _loginButtonEnable = value;
-                NotifyPropertyChanged("LoginButtonEnable");
+                NotifyPropertyChanged(nameof(LoginButtonEnable));
             }
         }
 
@@ -122,7 +121,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _studioList = value;
-                NotifyPropertyChanged("StudioList");
+                NotifyPropertyChanged(nameof(StudioList));
             }
         }
         private Studio _sStudio;
@@ -133,7 +132,7 @@ namespace UploadGui.ViewModels
             {
                 _sStudio = value;
                 TitleList = value.Titles;
-                NotifyPropertyChanged("SStudio");
+                NotifyPropertyChanged(nameof(SStudio));
             }
         }
 
@@ -145,7 +144,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _comboboxEnable = value;
-                NotifyPropertyChanged("ComboboxEnbale");
+                NotifyPropertyChanged(nameof(ComboboxEnbale));
             }
         }
 
@@ -156,7 +155,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _titleList = value;
-                NotifyPropertyChanged("TitleList");
+                NotifyPropertyChanged(nameof(TitleList));
             }
         }
 
@@ -168,7 +167,7 @@ namespace UploadGui.ViewModels
             {
                 _sTitle = value;
                 STitleSecretKey = STitle.SecretKey;
-                NotifyPropertyChanged("STitle");
+                NotifyPropertyChanged(nameof(STitle));
             }
         }
 
@@ -181,7 +180,7 @@ namespace UploadGui.ViewModels
             {
                 _sTitleSecretKey = value;
                 NextButtonEnable = true;
-                NotifyPropertyChanged("STitleSecretKey");
+                NotifyPropertyChanged(nameof(STitleSecretKey));
             }
         }
 
@@ -192,7 +191,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _nextButtonEnable = value;
-                NotifyPropertyChanged("NextButtonEnable");
+                NotifyPropertyChanged(nameof(NextButtonEnable));
             }
         }
         private List<string> _emailList;
@@ -202,7 +201,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _emailList = value;
-                NotifyPropertyChanged("EmailList");
+                NotifyPropertyChanged(nameof(EmailList));
             }
         }
         private List<User> _userList = new List<User>();
@@ -212,7 +211,7 @@ namespace UploadGui.ViewModels
             set
             {
                 _userList = value;
-                NotifyPropertyChanged("UserList");
+                NotifyPropertyChanged(nameof(UserList));
             }
         }
         #endregion
@@ -236,7 +235,7 @@ namespace UploadGui.ViewModels
             {
 
                 var passwordBox = sender as PasswordBox;
-                var password = passwordBox.Password.Trim();
+                var password = passwordBox.Password;
                 LoginButtonEnable = false;
                 await UserAuthenticateApiService.Login(new LoginRequest()
                 {
@@ -292,12 +291,10 @@ namespace UploadGui.ViewModels
 
                     return Regex.IsMatch(email, emailFormartRegex);
                 }
-
             }
             return false;
         }
 
-        private string _devAccountToken;
        
         public async Task GetStudiosList()
         {
@@ -311,13 +308,14 @@ namespace UploadGui.ViewModels
             {
                 if (StudioList == null)
                     StudioList = new List<Studio>();
-                foreach (var eachStudio in getStudioResult.Studios)
-                    StudioList.Add(eachStudio);
+
+                StudioList = getStudioResult.Studios
+                    .Select(e =>{return e;})
+                    .ToList();
+
                 StudioList.Add(Studio.OVERRIDE);
             }, _devAccountToken);
         }
-
-
         #endregion
 
     }
