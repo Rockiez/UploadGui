@@ -31,7 +31,6 @@ namespace UploadGui.Utils
         public static readonly DependencyProperty IsDropdownOpenedProperty = DependencyProperty.Register("IsDropdownOpened", typeof(bool), typeof(DropdownTextBox), new FrameworkPropertyMetadata(new PropertyChangedCallback(IsDropdownOpenedPropertyChanged)));
 
         /// <summary>
-        /// 下拉框是否已打开
         /// </summary>
         public bool IsDropdownOpened
         {
@@ -48,7 +47,6 @@ namespace UploadGui.Utils
 
         protected virtual void OnDropdownStateChanged(bool isopened)
         {
-            // 引发路由事件
             RoutedEventArgs args = new RoutedEventArgs();
             if (isopened)
             {
@@ -66,7 +64,6 @@ namespace UploadGui.Utils
         public static readonly DependencyProperty DropItemsProperty = DependencyProperty.Register("DropItems", typeof(IEnumerable), typeof(DropdownTextBox), new FrameworkPropertyMetadata(new PropertyChangedCallback(DropItemsPropertyChanged)));
 
         /// <summary>
-        /// 获取或设置下拉框中显示的项
         /// </summary>
         public IEnumerable DropItems
         {
@@ -113,7 +110,6 @@ namespace UploadGui.Utils
         public static readonly DependencyProperty MinDropdownHeightProperty = DependencyProperty.Register("MinDropdownHeight", typeof(double), typeof(DropdownTextBox));
 
         /// <summary>
-        /// 下拉列表框的最小高度
         /// </summary>
         public double MinDropdownHeight
         {
@@ -125,7 +121,6 @@ namespace UploadGui.Utils
         public static readonly DependencyProperty MaxDropdownHeightProperty = DependencyProperty.Register("MaxDropdownHeight", typeof(double), typeof(DropdownTextBox));
 
         /// <summary>
-        /// 下拉列表框的最大高度
         /// </summary>
         public double MaxDropdownHeight
         {
@@ -143,7 +138,6 @@ namespace UploadGui.Utils
         }
 
         /// <summary>
-        /// 获取或设置控件中显示的文本
         /// </summary>
         public string Text
         {
@@ -152,29 +146,15 @@ namespace UploadGui.Utils
         }
         #endregion
 
-        #region 字段
-        /// <summary>
-        /// 文本输入框
-        /// </summary>
+        #region 
         private TextBox m_InputBox = null;
-        /// <summary>
-        /// 模板中文本框控件的名字
-        /// </summary>
+
         const string PART_InputBox = "PART_InputBox";
-        /// <summary>
-        /// 显示项的面板
-        /// </summary>
         const string PART_ItemPanel = "PART_ItemPanel";
-        /// <summary>
-        /// 显示项的面板
-        /// </summary>
         private Panel m_itemsPanel = null;
         #endregion
 
-        #region 内部方法
-        /// <summary>
-        /// 创建项容器
-        /// </summary>
+        #region 
         /// <returns></returns>
         protected virtual UIElement CreateItemContainer()
         {
@@ -196,10 +176,10 @@ namespace UploadGui.Utils
                 IsDropdownOpened = false;
                 var passwordBox = PasswordBoxParameter as PasswordBox;
                 var selectUser = ((List<User>) DropItems)
-                    .Where(user => { return user.email == str; })
+                    .Where(user => { return user.Email == str; })
                     .First();
-                passwordBox.Password = selectUser.password;
-                Console.WriteLine(selectUser.password);
+                passwordBox.Password = selectUser.Password;
+                Console.WriteLine(selectUser.Password);
             }
         }
 
@@ -213,7 +193,6 @@ namespace UploadGui.Utils
         }
 
         /// <summary>
-        /// 更新项列表UI
         /// </summary>
         private void UpdateUIItems(IEnumerable items)
         {
@@ -234,14 +213,13 @@ namespace UploadGui.Utils
                         m_itemsPanel.Children.Add(ui);
                     }
                     m_itemsPanel.UpdateLayout();
-                    //m_itemsPanel.InvalidateMeasure();
-                    //m_itemsPanel.InvalidateArrange();
+                    m_itemsPanel.InvalidateMeasure();
+                    m_itemsPanel.InvalidateArrange();
                 }
             }
         }
 
         /// <summary>
-        /// 高亮显示字符
         /// </summary>
         /// <param name="txt"></param>
         private void FilterText(string txt)

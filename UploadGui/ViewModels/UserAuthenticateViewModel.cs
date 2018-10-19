@@ -24,21 +24,24 @@ namespace UploadGui.ViewModels
             LoginButtonEnable = true;
             NextButtonEnable = false;
 
-            using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
-            {
-                SqlCommand queryCommand = new SqlCommand($"select * from EmailTable ", connection);
-                queryCommand.Connection.Open();
-                SqlDataReader reader = queryCommand.ExecuteReader();
-                while (reader.Read())
-                {
-                    UserList.Add(new User()
-                    {
-                        email = reader["Email"].ToString(),
-                        password = reader["Password"].ToString()
-                    });
-                }
-                reader.Close();
-            }
+            //using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
+            //{
+            //    SqlCommand queryCommand = new SqlCommand($"select * from EmailTable ", connection);
+            //    queryCommand.Connection.Open();
+            //    SqlDataReader reader = queryCommand.ExecuteReader();
+            //    while (reader.Read())
+            //    {
+            //        UserList.Add(new User()
+            //        {
+            //            Email = reader["Email"].ToString(),
+            //            Password = reader["Password"].ToString()
+            //        });
+            //    }
+            //    reader.Close();
+            //}
+
+            UserList = DBApiService.All();
+
             //command binding
 
             LoginCommand = new DelegateCommand
@@ -235,19 +238,25 @@ namespace UploadGui.ViewModels
                     ComboboxEnbale = true;
                 });
                 LoginButtonEnable = true;
-                using (var connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
-                {
+                //using (var connection = new SqlConnection(
+                //    "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=User_info"))
+                //{
                     
-                    if (!UserList
-                        .Where(user => { return user.email == Username; })
-                        .Any())
-                    {
-                        SqlCommand insertCommand = new SqlCommand($"INSERT INTO EmailTable(Email,Password) VALUES('{Username},{Password}')", connection);
-                        insertCommand.Connection.Open();
+                //    if (!UserList
+                //        .Where(user => { return user.Email == Username; })
+                //        .Any())
+                //    {
+                //        SqlCommand insertCommand = new SqlCommand(
+                //            $"INSERT INTO EmailTable(Email,Password) VALUES('{Username},{Password}')"
+                //            , connection);
+                //        insertCommand.Connection.Open();
                         
-                        insertCommand.ExecuteNonQuery();
-                    }
-                }
+                //        insertCommand.ExecuteNonQuery();
+                //    }
+                //}
+
+                DBApiService.InsertNewUser(new User() {Email = Username, Password = Password});
+
             }
             else
             {

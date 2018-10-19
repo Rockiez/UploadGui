@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LinqToDB.Mapping;
 
 namespace UploadGui.Models
 {
@@ -83,13 +84,21 @@ namespace UploadGui.Models
         public string status;
         public object data;
     }
+
+    [Table(Name = "Products")]
     public class User
     {
-        public string email;
-        public string password;
+        [PrimaryKey, Identity]
+        public int ID;
+
+        [Column(Name = "Email"), NotNull]
+        public string Email;
+
+        [Column(Name = "Password")]
+        public string Password;
         public override string ToString()
         {
-            return email;
+            return Email;
         }
     }
 
