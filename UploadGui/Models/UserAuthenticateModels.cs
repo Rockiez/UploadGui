@@ -85,7 +85,7 @@ namespace UploadGui.Models
         public object data;
     }
 
-    [Table(Name = "Products")]
+    [Table(Name = "Users")]
     public class User
     {
         [PrimaryKey, Identity]
@@ -101,5 +101,4 @@ namespace UploadGui.Models
             return Email;
         }
     }
-
 }

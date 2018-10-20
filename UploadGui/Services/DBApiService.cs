@@ -9,14 +9,16 @@ using LinqToDB.Mapping;
 
 namespace UploadGui.Services
 {
-    class DBApiService : LinqToDB.Data.DataConnection
+    class UsersDBApiService : LinqToDB.Data.DataConnection
     {
-        public DBApiService() : base("LocalDB") { }
+
+
+        public UsersDBApiService() : base("LocalDB") { }
         public ITable<User> Users => GetTable<User>();
 
         public static List<User> All()
         {
-            using (var db = new DBApiService())
+            using (var db = new UsersDBApiService())
             {
                 var query = from u in db.Users
                     orderby u.ID descending
@@ -32,22 +34,21 @@ namespace UploadGui.Services
                 return true;
             }
 
-            using (var db = new DBApiService())
+            using (var db = new UsersDBApiService())
             {
                 db.Insert(newUser);
                 return true;
             }
-            
         }
 
         public static bool QueryUserExist(string userEmail)
         {
-            using (var db = new DBApiService())
+            using (var db = new UsersDBApiService())
             {
                 var query = from u in db.Users
                     where u.Email == userEmail
                     select u;
-                return query.First() != null;
+                return query.Any();
             }
         }
     }
