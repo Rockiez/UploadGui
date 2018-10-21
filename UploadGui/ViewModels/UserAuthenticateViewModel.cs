@@ -212,7 +212,7 @@ namespace UploadGui.ViewModels
                 LoginButtonEnable = true;
 
                 UsersDBApiService.InsertNewUser(new User() {Email = Username, Password = password});
-
+                  
             }
             else
             {

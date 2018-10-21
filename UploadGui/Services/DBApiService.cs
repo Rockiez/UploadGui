@@ -29,7 +29,7 @@ namespace UploadGui.Services
 
         public static bool InsertNewUser(User newUser)
         {
-            if (QueryUserExist(newUser.Email))
+            if (QueryUserExistence(newUser.Email))
             {
                 return true;
             }
@@ -41,7 +41,7 @@ namespace UploadGui.Services
             }
         }
 
-        public static bool QueryUserExist(string userEmail)
+        public static bool QueryUserExistence(string userEmail)
         {
             using (var db = new UsersDBApiService())
             {
