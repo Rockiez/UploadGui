@@ -24,7 +24,13 @@ namespace UploadGui.ViewModels
             LoginButtonEnable = true;
             NextButtonEnable = false;
 
-            UserList = UsersDBApiService.All();
+            try
+            {
+                UserList = UsersDBApiService.All();
+            }
+            catch (Exception)
+            {
+            }
 
             //command binding
 
@@ -212,7 +218,15 @@ namespace UploadGui.ViewModels
                 });
                 LoginButtonEnable = true;
 
-                UsersDBApiService.InsertNewUser(new User() {Email = Username, Password = password});
+                try
+                {
+                    UsersDBApiService.InsertNewUser(new User() { Email = Username, Password = password });
+
+                }
+                catch (Exception)
+                {
+
+                }
                   
             }
             else
