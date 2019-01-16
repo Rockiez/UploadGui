@@ -3,7 +3,7 @@
 The tool has a  simple and intuitive GUI interface and designs around to make it easier for users to upload the configuration files to the PlayFab to setup your new title.
 
 
-The project Refactoring from [UB_Uploader](
+The project redeveloped from [UB_Uploader](
 https://github.com/PlayFab/UnicornBattle/tree/master/UB_Uploader).
 
 ### Download
