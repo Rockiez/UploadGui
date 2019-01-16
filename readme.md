@@ -26,5 +26,5 @@ Click the [link](https://github.com/Rockiez/UploadGui/releases) to download the 
 ![Upload](https://github.com/rockiez/UploadGui/raw/master/images/upload.jpg)
 
 ## (Optional) Link to Database
-Create a database and link to it can record your login information for fill information automatically next time. You can use this feature on popular and secure devices.
+Create a database and link to it can record your login information for fill information automatically next time. You can use this feature on Commonly used and secure devices.
 You need to download the source code of the project, build the database locally, and update your database information in App.config. The table design of database needs to map to the Class User in UserAuthenticateModels.cs. For more information, see [linq2db](HTTPS://github.com/linq2db/linq2db).
