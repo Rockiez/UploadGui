@@ -15,15 +15,15 @@ Click the [link](https://github.com/Rockiez/UploadGui/releases) to download the 
 1. Unzip and run the .exe file.
 2. Enter your email address and password, then click the Login button.
 
-![Login](http://github.com/rockiez/UploadGui/raw/master/images/login.jpg)
+![Login](https://github.com/rockiez/UploadGui/raw/master/images/login.jpg)
 
 3. Select Studio and Title your account have, and the tool will automatically get its developer key from PlayFab.
 
-![selectTitl](http://github.com/rockiez/UploadGui/raw/master/images/selectTitle.jpg)
+![selectTitl](https://github.com/rockiez/UploadGui/raw/master/images/selectTitle.jpg)
 
 4. If you select a folder, the tool will automatically find the file which file name map resource in the folder. You can also choose a corresponding data file for a single resource.
 
-![Upload](http://github.com/rockiez/UploadGui/raw/master/images/upload.jpg)
+![Upload](https://github.com/rockiez/UploadGui/raw/master/images/upload.jpg)
 
 ##(Optional) Link to Database
 Create a database and link to it can record your login information for fill information automatically next time. You can use this feature on popular and secure devices.
