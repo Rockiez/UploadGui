@@ -10,7 +10,7 @@ using UploadGui.Models;
 namespace UploadGui.Services
 {
 
-    public class UserAuthenticateApiService
+    public static class UserAuthenticateApiService
     {
         public static async Task Login(LoginRequest request, Action<LoginResult> resultCallback)
         {
@@ -26,27 +26,17 @@ namespace UploadGui.Services
 
         internal static async Task MakeApiCall<TRequestType, TResultType>(string api, string apiEndpoint, TRequestType request, Action<TResultType> resultCallback) where TResultType : class
         {
-            var req = JsonWrapper.SerializeObject(request, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
-
-            //Set headers
-            var headers = new Dictionary<string, string>
-            {
-                {"Content-Type", "application/json"},
-                {"X-ReportErrorAsSuccess", "true"},
-                {"X-PlayFabSDK", "PlayFab_EditorExtensions" + "_" + "2.53.181001"}
-            };
-
-
+            var requestJson = JsonWrapper.SerializeObject(request, UserAuthenticateJsonSerializerStrategyService.ApiSerializerStrategy);
+            
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiEndpoint);
                 var result = await client.PostAsync(api, new StringContent(
-                    req.Trim(), Encoding.UTF8, "application/json"));
+                    requestJson, Encoding.UTF8, "application/json"));
                 string resultContent = await result.Content.ReadAsStringAsync();
                 DeserializeResult(api, resultCallback, resultContent);
             }
         }
-
 
 
         private static void DeserializeResult<TResultType>(string api, Action<TResultType> resultCallback, string response) where TResultType : class
@@ -67,6 +57,5 @@ namespace UploadGui.Services
 
             resultCallback(result);
         }
-
     }
 }

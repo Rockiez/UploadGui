@@ -11,8 +11,6 @@ namespace UploadGui.Services
 {
     class UsersDBApiService : LinqToDB.Data.DataConnection
     {
-
-
         public UsersDBApiService() : base("LocalDB") { }
         public ITable<User> Users => GetTable<User>();
 

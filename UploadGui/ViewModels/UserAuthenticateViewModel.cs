@@ -23,6 +23,7 @@ namespace UploadGui.ViewModels
             CurrentPage = new LoginPage(this);
             LoginButtonEnable = true;
             NextButtonEnable = false;
+
             UserList = UsersDBApiService.All();
 
             //command binding
